@@ -1,0 +1,42 @@
+[
+  {
+    "idRecipe": "001",
+    "name": "Pizza Margarita Clásica",
+    "description": "Una pizza italiana tradicional con una combinación simple pero deliciosa de ingredientes frescos.",
+    "label": "Italiana",
+    "ingredients": "Masa de pizza, aceite de oliva, ajo, tomates, queso mozzarella, albahaca fresca",
+    "steps": "1. Precalentar el horno. 2. Extender la masa. 3. Aplicar aceite de oliva y ajo. 4. Añadir tomates en rodajas y mozzarella. 5. Hornear. 6. Adornar con albahaca."
+  },
+  {
+    "idRecipe": "002",
+    "name": "Pastel de Chocolate Vegano",
+    "description": "Pastel de chocolate rico y húmedo que es completamente vegano y perfecto para cualquier celebración.",
+    "label": "Vegana",
+    "ingredients": "Harina, polvo de cacao, bicarbonato de sodio, sal, extracto de vainilla, aceite vegetal, vinagre, agua, azúcar",
+    "steps": "1. Precalentar el horno. 2. Mezclar ingredientes secos. 3. Mezclar ingredientes húmedos. 4. Combinar mezclas. 5. Verter en el molde. 6. Hornear."
+  },
+  {
+    "idRecipe": "003",
+    "name": "Ensalada César",
+    "description": "Ensalada crujiente y cremosa con un aderezo picante, perfecta para una comida ligera o como acompañamiento.",
+    "label": "Ensalada",
+    "ingredients": "Lechuga romana, queso parmesano, crutones, aderezo César",
+    "steps": "1. Lavar y picar lechuga. 2. Mezclar el aderezo. 3. Mezclar la lechuga con el aderezo. 4. Añadir crutones y queso."
+  },
+  {
+    "idRecipe": "004",
+    "name": "Tacos de Carne",
+    "description": "Tacos sabrosos y picantes rellenos de carne molida sazonada, perfectos para una comida rápida y satisfactoria.",
+    "label": "Mexicana",
+    "ingredients": "Carne molida, condimento para tacos, tortillas, cebolla, cilantro, limón, salsa",
+    "steps": "1. Cocinar la carne con el condimento. 2. Preparar las tortillas. 3. Armar los tacos con la carne, cebolla, cilantro y salsa. 4. Servir con limón."
+  },
+  {
+    "idRecipe": "005",
+    "name": "Sopa de Tomate y Albahaca",
+    "description": "Una sopa de tomate reconfortante y aromática enriquecida con los sabores de la albahaca fresca y crema.",
+    "label": "Sopa",
+    "ingredients": "Tomates, cebolla, ajo, caldo de pollo, albahaca, crema, sal, pimienta",
+    "steps": "1. Saltear cebolla y ajo. 2. Añadir tomates y caldo. 3. Cocinar a fuego lento. 4. Licuar la sopa. 5. Incorporar crema y albahaca. 6. Sazonar."
+  }
+]
