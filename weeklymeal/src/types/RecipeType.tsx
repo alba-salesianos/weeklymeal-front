@@ -6,3 +6,8 @@ export type Recipe = {
   ingredients: string;
   steps: string;
 };
+
+export type MenuItem = {
+  day: string;
+  recipe: Recipe;
+};

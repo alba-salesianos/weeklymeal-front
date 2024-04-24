@@ -1,6 +1,6 @@
 import React from "react";
 import { RecipeContext, RecipeTypeContext } from "../contexts/RecipeContext";
-import { Recipe } from "../types/RecipeType";
+import { MenuItem, Recipe } from "../types/RecipeType";
 import recipesData from "../testing/recipesExample.json";
 
 type RecipeProviderProps = {
@@ -22,6 +22,7 @@ function RecipeProvider(props: RecipeProviderProps) {
   const [recipe, setRecipe] = React.useState(recipeDefault);
   const [todaysRecipe, setTodaysRecipe] = React.useState(recipeDefault);
   const [recipes, setRecipes] = React.useState<Recipe[]>(recipesData);
+  const [currentMenu, setCurrentMenu] = React.useState<MenuItem[]>([]);
 
   const defaultValue: RecipeTypeContext = {
     recipe,
@@ -30,6 +31,8 @@ function RecipeProvider(props: RecipeProviderProps) {
     setTodaysRecipe,
     recipes,
     setRecipes,
+    currentMenu,
+    setCurrentMenu,
   };
 
   return (
