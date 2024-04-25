@@ -28,7 +28,6 @@ const WeeklyMenu = () => {
   return (
     <Provider>
       <View style={styles.container}>
-        <NewMenu />
         <ScrollView>
           {currentMenu.map(({ day, recipe }, index) => (
             <Pressable key={index} onPress={() => showModal({ day, recipe })}>

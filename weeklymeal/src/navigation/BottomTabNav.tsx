@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { BottomNavigation } from "react-native-paper";
 import Homescreen from "../screens/Homescreen";
@@ -15,7 +15,7 @@ const BottomTabNav = () => {
       focusedIcon: "home",
       unfocusedIcon: "home-outline",
     },
-    { key: "menu", title: "Generador", focusedIcon: "notebook-outline" },
+    { key: "menu", title: "Menú", focusedIcon: "notebook-outline" },
     { key: "recipes", title: "Recetas", focusedIcon: "chef-hat" },
     {
       key: "user",

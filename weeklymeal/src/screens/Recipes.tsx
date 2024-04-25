@@ -14,8 +14,6 @@ const Recipes = () => {
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: "white", margin: 40 };
 
-  //const [showAddRecipe, setShowAddRecipe] = React.useState(false);
-
   return (
     <PaperProvider>
       <View>
@@ -25,7 +23,6 @@ const Recipes = () => {
             onDismiss={hideModal}
             contentContainerStyle={containerStyle}
           >
-            <Text>Probando</Text>
             <AddRecipe />
           </Modal>
         </Portal>

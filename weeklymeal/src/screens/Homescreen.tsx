@@ -1,23 +1,42 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { RecipeContext } from "../contexts/RecipeContext";
+import { Modal, PaperProvider, Portal } from "react-native-paper";
+import NewMenu from "../components/NewMenu";
+import TodayRecipe from "../components/TodayRecipe";
 
 const Homescreen = () => {
+  const { todaysRecipe } = React.useContext(RecipeContext);
+
+  const [visible, setVisible] = React.useState(false);
+
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = { backgroundColor: "white", margin: 40 };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Hoy toca: Papas </Text>
-      <View>
-        <Pressable style={styles.buttonRecipe}>
-          <Text style={styles.buttonText}>Ver receta</Text>
-        </Pressable>
-        <Pressable style={styles.buttonSeeMenu}>
-          <Text style={styles.buttonText}>Ver menú</Text>
+    <PaperProvider>
+      <View style={styles.container}>
+        <TodayRecipe />
+        <View>
+          <Pressable style={styles.buttonRecipe}>
+            <Text style={styles.buttonText}>Ver receta</Text>
+          </Pressable>
+        </View>
+        <Portal>
+          <Modal
+            visible={visible}
+            onDismiss={hideModal}
+            contentContainerStyle={containerStyle}
+          >
+            <NewMenu />
+          </Modal>
+        </Portal>
+        <Pressable style={styles.newMenuButton} onPress={showModal}>
+          <Text style={styles.buttonText}>CREAR MENÚ NUEVO</Text>
         </Pressable>
       </View>
-
-      <Pressable style={styles.newMenuButton}>
-        <Text style={styles.buttonText}>CREAR MENÚ NUEVO</Text>
-      </Pressable>
-    </View>
+    </PaperProvider>
   );
 };
 

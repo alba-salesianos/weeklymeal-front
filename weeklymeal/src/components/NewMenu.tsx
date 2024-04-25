@@ -9,13 +9,13 @@ const NewMenu = () => {
 
   const generateMenu = () => {
     const daysOfWeek = [
-      "Lunes",
-      "Martes",
-      "Miércoles",
-      "Jueves",
-      "Viernes",
-      "Sábado",
-      "Domingo",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
     ];
     const recipesNeeded = 7;
     const loops = Math.ceil(recipesNeeded / recipes.length);
@@ -45,7 +45,11 @@ const NewMenu = () => {
 
   return (
     <View style={styles.button}>
-      {menuGenerated || <Button title="Generar menú" onPress={generateMenu} />}
+      {menuGenerated ? (
+        <Text>Menú generado correctamente</Text>
+      ) : (
+        <Button title="Generar menú" onPress={generateMenu} />
+      )}
     </View>
   );
 };
