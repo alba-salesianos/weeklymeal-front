@@ -1,16 +1,21 @@
-import { BottomNavigation, PaperProvider } from "react-native-paper";
-import { StyleSheet, Text, View } from "react-native";
+import "react-native-gesture-handler";
+
+import { PaperProvider } from "react-native-paper";
+import { StyleSheet } from "react-native";
 import React from "react";
 import Header from "./src/header/Header";
-import BottomTabNav from "./src/navigation/BottomTabNav";
 import RecipeProvider from "./src/providers/RecipeProvider";
+import AuthHomepage from "./src/components/Authentification/AuthHomepage";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
   return (
     <RecipeProvider>
       <PaperProvider>
-        <Header />
-        <BottomTabNav />
+        <NavigationContainer>
+          <Header />
+          <AuthHomepage />
+        </NavigationContainer>
       </PaperProvider>
     </RecipeProvider>
   );
