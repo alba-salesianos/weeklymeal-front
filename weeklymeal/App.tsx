@@ -7,17 +7,20 @@ import Header from "./src/header/Header";
 import RecipeProvider from "./src/providers/RecipeProvider";
 import AuthHomepage from "./src/components/Authentification/AuthHomepage";
 import { NavigationContainer } from "@react-navigation/native";
+import UserInfoProvider from "./src/providers/UserInfoProvider";
 
 export default function App() {
   return (
-    <RecipeProvider>
-      <PaperProvider>
-        <NavigationContainer>
-          <Header />
-          <AuthHomepage />
-        </NavigationContainer>
-      </PaperProvider>
-    </RecipeProvider>
+    <NavigationContainer>
+      <RecipeProvider>
+        <UserInfoProvider>
+          <PaperProvider>
+            <Header />
+            <AuthHomepage />
+          </PaperProvider>
+        </UserInfoProvider>
+      </RecipeProvider>
+    </NavigationContainer>
   );
 }
 

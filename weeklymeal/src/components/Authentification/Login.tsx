@@ -43,7 +43,7 @@ const Login: React.FC<Props> = (props) => {
       (await loginUsers())
         ? (setCurrentUser(formData.name),
           setisLogged(true),
-          props.navigation.push("Homescreen"))
+          props.navigation.push("BottomTabNav"))
         : Toast.error("Usuario o contraseña incorrecta.", "top");
     }
   };

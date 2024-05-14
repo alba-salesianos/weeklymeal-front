@@ -17,7 +17,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 const AuthHomepage = () => {
   return (
     <Stack.Navigator
-      initialRouteName="AuthStack"
+      initialRouteName="BottomTabNav"
       screenOptions={{
         headerShown: false,
       }}
