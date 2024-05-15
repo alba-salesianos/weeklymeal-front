@@ -2,10 +2,10 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
-import ChangeUser from "./ChangeUser";
-import ChangePassword from "./ChangePassword";
-import DataButtonGroup from "./DataButtonGroup";
-import AdminDataButtonGroup from "./AdminDataButtonGroup";
+import ChangeUser from "../components/UserStacks/ChangeUser";
+import ChangePassword from "../components/UserStacks/ChangePassword";
+import DataButtonGroup from "../components/UserStacks/DataButtonGroup";
+import AdminDataButtonGroup from "../components/UserStacks/AdminDataButtonGroup";
 
 export type DataStackParamList = {
   DataButtonGroup: undefined;

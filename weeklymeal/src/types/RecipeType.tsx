@@ -2,9 +2,16 @@ export type Recipe = {
   idRecipe: string;
   name: string;
   description: string;
-  label: string;
+  label: "hidratos" | "fibra" | "proteína" | "pescado";
   ingredients: string;
   steps: string;
+};
+
+export type Preferences = {
+  hidratos: number;
+  fibra: number;
+  proteína: number;
+  pescado: number;
 };
 
 export type MenuItem = {

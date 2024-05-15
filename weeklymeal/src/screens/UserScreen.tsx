@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { UserInfoContext } from "../contexts/UserInfoContext";
-
-import UserDataStack from "../components/UserStacks/UserDataStack";
+import UserDataStack from "../navigation/UserDataStack";
 
 const UserScreen = () => {
   const { user } = React.useContext(UserInfoContext);

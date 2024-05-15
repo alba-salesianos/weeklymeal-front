@@ -11,7 +11,7 @@ const TodayRecipe = () => {
     idRecipe: "",
     name: "",
     description: "",
-    label: "",
+    label: "proteína",
     ingredients: "",
     steps: "",
   });

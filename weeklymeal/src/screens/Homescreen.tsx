@@ -6,13 +6,18 @@ import NewMenu from "../components/NewMenu";
 import TodayRecipe from "../components/TodayRecipe";
 
 const Homescreen = () => {
-  const { todaysRecipe } = React.useContext(RecipeContext);
-
   const [visible, setVisible] = React.useState(false);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const containerStyle = { backgroundColor: "white", margin: 40 };
+
+  // Callback function to handle when the menu is generated
+  const handleMenuGenerated = () => {
+    console.log("Menú generado con éxito!");
+    hideModal(); // Close the modal after the menu has been generated
+  };
+
+  const containerStyle = { backgroundColor: "white", padding: 20, margin: 40 };
 
   return (
     <PaperProvider>
@@ -29,7 +34,8 @@ const Homescreen = () => {
             onDismiss={hideModal}
             contentContainerStyle={containerStyle}
           >
-            <NewMenu />
+            {/* Pass the handleMenuGenerated callback to NewMenu */}
+            <NewMenu onMenuGenerated={handleMenuGenerated} />
           </Modal>
         </Portal>
         <Pressable style={styles.newMenuButton} onPress={showModal}>
@@ -46,38 +52,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    margin: "auto",
-  },
-  title: {
-    borderRadius: 30,
-    margin: 30,
-    padding: 20,
-    textAlign: "center",
-    fontSize: 40,
-    fontWeight: "500",
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "grey",
-  },
-
-  buttonSeeMenu: {
-    alignItems: "center",
     justifyContent: "center",
-    alignSelf: "center",
-    marginTop: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 60,
-    borderRadius: 10,
-    borderColor: "gray",
-    borderWidth: 1,
-    backgroundColor: "#f8d7d2",
-  },
-  buttonText: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "black",
+    alignItems: "center",
   },
   buttonRecipe: {
     backgroundColor: "#dbeed0",
@@ -96,11 +72,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginTop: 20,
-    paddingVertical: 30,
-    paddingHorizontal: 50,
-    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 60,
+    borderRadius: 10,
     backgroundColor: "#f08a6e",
     borderColor: "gray",
     borderWidth: 1,
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "black",
   },
 });

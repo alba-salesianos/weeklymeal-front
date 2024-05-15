@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
-import { DataStackParamList } from "./UserDataStack";
+import { DataStackParamList } from "../../navigation/UserDataStack";
 
 type Props = StackScreenProps<DataStackParamList, "DataButtonGroup">;
 
