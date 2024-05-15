@@ -18,18 +18,25 @@ const NewMenu = () => {
       "Sunday",
     ];
     const recipesNeeded = 7;
-    const loops = Math.ceil(recipesNeeded / recipes.length);
-
     const selectedRecipes: Recipe[] = [];
+    let recentLabels: string[] = []; // to keep track of labels used in the last two days
 
-    for (let i = 0; i < loops; i++) {
-      const shuffledRecipes = recipes.sort(() => Math.random() - 0.5);
-
+    while (selectedRecipes.length < recipesNeeded) {
+      const shuffledRecipes = [...recipes].sort(() => Math.random() - 0.5);
       for (const recipe of shuffledRecipes) {
         if (selectedRecipes.length >= recipesNeeded) {
           break;
         }
-        selectedRecipes.push(recipe);
+        // Check if the label is not in the recentLabels array
+        if (!recentLabels.includes(recipe.label)) {
+          selectedRecipes.push(recipe);
+          // Update recent labels: keep only the last two entries
+          if (recentLabels.length === 2) {
+            recentLabels.shift(); // remove the oldest label
+          }
+          recentLabels.push(recipe.label); // add the new label
+          break; // Break after selecting a recipe to move to the next day
+        }
       }
     }
 

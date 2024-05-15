@@ -1,42 +1,162 @@
 [
   {
-    "idRecipe": "001",
-    "name": "Pizza Margarita Clásica",
-    "description": "Una pizza italiana tradicional con una combinación simple pero deliciosa de ingredientes frescos.",
-    "label": "Italiana",
-    "ingredients": "Masa de pizza, aceite de oliva, ajo, tomates, queso mozzarella, albahaca fresca",
-    "steps": "1. Precalentar el horno. 2. Extender la masa. 3. Aplicar aceite de oliva y ajo. 4. Añadir tomates en rodajas y mozzarella. 5. Hornear. 6. Adornar con albahaca."
+    "idRecipe": "r1",
+    "name": "Pollo al horno",
+    "description": "Pollo asado con hierbas y especias.",
+    "label": "proteína",
+    "ingredients": "1 pollo entero, aceite de oliva, romero, sal, pimienta",
+    "steps": "Marinar el pollo, precalentar el horno a 200°C, hornear por 90 minutos."
   },
   {
-    "idRecipe": "002",
-    "name": "Pastel de Chocolate Vegano",
-    "description": "Pastel de chocolate rico y húmedo que es completamente vegano y perfecto para cualquier celebración.",
-    "label": "Vegana",
-    "ingredients": "Harina, polvo de cacao, bicarbonato de sodio, sal, extracto de vainilla, aceite vegetal, vinagre, agua, azúcar",
-    "steps": "1. Precalentar el horno. 2. Mezclar ingredientes secos. 3. Mezclar ingredientes húmedos. 4. Combinar mezclas. 5. Verter en el molde. 6. Hornear."
+    "idRecipe": "r2",
+    "name": "Ensalada de quinoa",
+    "description": "Ensalada fresca con quinoa, tomate y aguacate.",
+    "label": "fibra",
+    "ingredients": "1 taza de quinoa, 2 tomates, 1 aguacate, aceite de oliva, limón, sal",
+    "steps": "Cocer la quinoa, picar verduras, mezclar y aliñar."
   },
   {
-    "idRecipe": "003",
-    "name": "Ensalada César",
-    "description": "Ensalada crujiente y cremosa con un aderezo picante, perfecta para una comida ligera o como acompañamiento.",
-    "label": "Ensalada",
-    "ingredients": "Lechuga romana, queso parmesano, crutones, aderezo César",
-    "steps": "1. Lavar y picar lechuga. 2. Mezclar el aderezo. 3. Mezclar la lechuga con el aderezo. 4. Añadir crutones y queso."
+    "idRecipe": "r3",
+    "name": "Salmón a la parrilla",
+    "description": "Salmón fresco a la parrilla con limón.",
+    "label": "pescado",
+    "ingredients": "2 filetes de salmón, aceite de oliva, limón, sal, pimienta",
+    "steps": "Marinar el salmón, precalentar la parrilla, cocinar cada lado por 6 minutos."
   },
   {
-    "idRecipe": "004",
-    "name": "Tacos de Carne",
-    "description": "Tacos sabrosos y picantes rellenos de carne molida sazonada, perfectos para una comida rápida y satisfactoria.",
-    "label": "Mexicana",
-    "ingredients": "Carne molida, condimento para tacos, tortillas, cebolla, cilantro, limón, salsa",
-    "steps": "1. Cocinar la carne con el condimento. 2. Preparar las tortillas. 3. Armar los tacos con la carne, cebolla, cilantro y salsa. 4. Servir con limón."
+    "idRecipe": "r4",
+    "name": "Arroz integral",
+    "description": "Arroz integral cocido perfectamente al dente.",
+    "label": "hidratos",
+    "ingredients": "1 taza de arroz integral, 2 tazas de agua, sal",
+    "steps": "Lavar el arroz, cocinar con agua hasta que el arroz esté tierno."
   },
   {
-    "idRecipe": "005",
-    "name": "Sopa de Tomate y Albahaca",
-    "description": "Una sopa de tomate reconfortante y aromática enriquecida con los sabores de la albahaca fresca y crema.",
-    "label": "Sopa",
-    "ingredients": "Tomates, cebolla, ajo, caldo de pollo, albahaca, crema, sal, pimienta",
-    "steps": "1. Saltear cebolla y ajo. 2. Añadir tomates y caldo. 3. Cocinar a fuego lento. 4. Licuar la sopa. 5. Incorporar crema y albahaca. 6. Sazonar."
+    "idRecipe": "r5",
+    "name": "Lentejas estofadas",
+    "description": "Lentejas cocidas con verduras y especias.",
+    "label": "proteína",
+    "ingredients": "1 taza de lentejas, zanahoria, cebolla, ajo, pimentón, sal, aceite",
+    "steps": "Remojar lentejas, sofreír verduras, cocinar todo hasta que las lentejas estén tiernas."
+  },
+  {
+    "idRecipe": "r6",
+    "name": "Pasta integral",
+    "description": "Pasta integral servida con una salsa de tomate casera.",
+    "label": "hidratos",
+    "ingredients": "200g de pasta integral, tomates, cebolla, ajo, albahaca, sal",
+    "steps": "Cocer la pasta, preparar la salsa, mezclar y servir."
+  },
+  {
+    "idRecipe": "r7",
+    "name": "Tofu salteado",
+    "description": "Tofu firme salteado con verduras variadas.",
+    "label": "proteína",
+    "ingredients": "200g de tofu, pimiento, cebolla, salsa de soja, aceite de sésamo",
+    "steps": "Cortar tofu y verduras, saltear con aceite, añadir salsa de soja al final."
+  },
+  {
+    "idRecipe": "r8",
+    "name": "Trucha al horno",
+    "description": "Trucha al horno con hierbas y limón.",
+    "label": "pescado",
+    "ingredients": "1 trucha, limón, eneldo, aceite de oliva, sal, pimienta",
+    "steps": "Preparar la trucha, añadir condimentos, hornear a 180°C por 25 minutos."
+  },
+  {
+    "idRecipe": "r9",
+    "name": "Batido de fibra",
+    "description": "Batido rico en fibra con frutas y semillas.",
+    "label": "fibra",
+    "ingredients": "Plátano, manzana, semillas de chía, leche de almendras, espinacas",
+    "steps": "Combinar todos los ingredientes en la licuadora, mezclar hasta obtener una consistencia suave."
+  },
+  {
+    "idRecipe": "r10",
+    "name": "Estofado de garbanzos",
+    "description": "Garbanzos estofados con especias y vegetales.",
+    "label": "proteína",
+    "ingredients": "1 taza de garbanzos, tomate, cebolla, comino, pimentón, aceite, sal",
+    "steps": "Soak garbanzos, cook with spices and vegetables until everything is tender."
+  },
+  {
+    "idRecipe": "r11",
+    "name": "Paella de verduras",
+    "description": "Paella repleta de verduras frescas y arroz.",
+    "label": "hidratos",
+    "ingredients": "Arroz, guisantes, pimientos, alcachofas, azafrán, caldo de verduras",
+    "steps": "Sofreír las verduras, añadir arroz y caldo, cocinar hasta que el arroz esté hecho."
+  },
+  {
+    "idRecipe": "r12",
+    "name": "Brochetas de pescado",
+    "description": "Brochetas de pescado marinadas y asadas.",
+    "label": "pescado",
+    "ingredients": "Filetes de pescado, pimiento, cebolla, tomate, aceite de oliva, limón, sal",
+    "steps": "Cortar el pescado y verduras, ensartar en brochetas, asar a la parrilla."
+  },
+  {
+    "idRecipe": "r13",
+    "name": "Hamburguesas de lentejas",
+    "description": "Hamburguesas vegetales hechas de lentejas y avena.",
+    "label": "proteína",
+    "ingredients": "Lentejas cocidas, avena, cebolla, ajo, perejil, sal, aceite de oliva",
+    "steps": "Mezclar todos los ingredientes, formar hamburguesas, cocinar en sartén hasta dorar."
+  },
+  {
+    "idRecipe": "r14",
+    "name": "Crepes de avena",
+    "description": "Crepes ligeros hechos con harina de avena.",
+    "label": "hidratos",
+    "ingredients": "Harina de avena, huevo, leche, sal, aceite para cocinar",
+    "steps": "Mezclar ingredientes para la masa, cocinar en sartén caliente, servir con miel o mermelada."
+  },
+  {
+    "idRecipe": "r15",
+    "name": "Bowl de fibra con bayas",
+    "description": "Bowl nutritivo con bayas, semillas y yogur.",
+    "label": "fibra",
+    "ingredients": "Yogur natural, bayas variadas, semillas de chía, miel",
+    "steps": "Combinar yogur con bayas y semillas, endulzar con miel al gusto."
+  },
+  {
+    "idRecipe": "r16",
+    "name": "Curry de garbanzos",
+    "description": "Curry aromático de garbanzos con leche de coco.",
+    "label": "proteína",
+    "ingredients": "Garbanzos, leche de coco, curry en polvo, cebolla, aceite, sal",
+    "steps": "Sauté onions, add spices and chickpeas, pour in coconut milk, simmer until thickened."
+  },
+  {
+    "idRecipe": "r17",
+    "name": "Risotto de setas",
+    "description": "Risotto cremoso con setas variadas y parmesano.",
+    "label": "hidratos",
+    "ingredients": "Arroz arborio, setas, caldo de pollo, cebolla, ajo, parmesano, mantequilla",
+    "steps": "Sauté onion and mushrooms, add rice, gradually mix in broth, finish with parmesan and butter."
+  },
+  {
+    "idRecipe": "r18",
+    "name": "Ensalada de algas",
+    "description": "Ensalada refrescante de algas marinas con pepino y semillas de sésamo.",
+    "label": "fibra",
+    "ingredients": "Algas marinas, pepino, semillas de sésamo, vinagre de arroz, azúcar, sal",
+    "steps": "Hydrate seaweed, mix with sliced cucumber, season with sesame seeds and rice vinegar."
+  },
+  {
+    "idRecipe": "r19",
+    "name": "Filete de merluza al horno",
+    "description": "Merluza al horno con hierbas y un toque de limón.",
+    "label": "pescado",
+    "ingredients": "Filete de merluza, limón, perejil, aceite de oliva, sal, pimienta",
+    "steps": "Preparar el filete, añadir condimentos, hornear a 180°C por 20 minutos."
+  },
+  {
+    "idRecipe": "r20",
+    "name": "Guiso de judías",
+    "description": "Guiso de judías blancas con tomate y chorizo.",
+    "label": "proteína",
+    "ingredients": "Judías blancas, chorizo, tomate, cebolla, ajo, pimentón, sal, aceite",
+    "steps": "Soak beans, cook with chorizo and spices until tender."
   }
 ]
