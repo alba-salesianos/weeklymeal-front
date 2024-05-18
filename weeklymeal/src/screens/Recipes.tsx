@@ -2,17 +2,26 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
 //import AddRecipe from "../components/cards/AddRecipe";
-import { Modal, PaperProvider, Portal } from "react-native-paper";
+import { Modal, PaperProvider, Portal, Searchbar } from "react-native-paper";
 import AddRecipe from "../components/AddRecipe";
 
 const Recipes = () => {
   const { recipes } = useContext(RecipeContext);
 
   const [visible, setVisible] = React.useState(false);
+  const [searchText, setSearchText] = React.useState("");
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: "white", margin: 40 };
+
+  const searchRecipe = () => {
+    return recipes.filter((recipe) =>
+      recipe.name.toLowerCase().includes(searchText)
+    );
+  };
+
+  const filteredRecipes = searchRecipe();
 
   return (
     <PaperProvider>
@@ -26,13 +35,18 @@ const Recipes = () => {
             <AddRecipe />
           </Modal>
         </Portal>
+
+        <Searchbar
+          placeholder="Busque el nombre de una receta..."
+          onChangeText={setSearchText}
+          value={searchText}
+        />
         <Pressable style={styles.button} onPress={showModal}>
           <Text>Añadir receta</Text>
         </Pressable>
-
         <ScrollView>
-          {recipes &&
-            recipes.map((recipe, index) => (
+          {filteredRecipes &&
+            filteredRecipes.map((recipe, index) => (
               <View key={index} style={styles.card}>
                 <Text>{recipe.name}</Text>
                 <Text>{recipe.label}</Text>
