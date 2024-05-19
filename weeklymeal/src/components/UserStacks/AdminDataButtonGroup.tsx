@@ -2,12 +2,16 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { DataStackParamList } from "../../navigation/UserDataStack";
+import { UserInfoContext } from "../../contexts/UserInfoContext";
 
 type Props = StackScreenProps<DataStackParamList, "AdminDataButtonGroup">;
 
 const AdminDataButtonGroup: React.FC<Props> = (props) => {
+  const { user } = React.useContext(UserInfoContext);
+
   return (
     <View style={styles.container}>
+      <Text>Hola, {user.name}</Text>
       <View style={styles.buttonGroup}>
         <Pressable
           style={styles.button}
@@ -22,7 +26,10 @@ const AdminDataButtonGroup: React.FC<Props> = (props) => {
           <Text style={styles.buttonText}>Cambiar contraseña</Text>
         </Pressable>
 
-        <Pressable style={styles.button}>
+        <Pressable
+          style={styles.button}
+          onPress={() => props.navigation.push("ManageUsers")}
+        >
           <Text style={styles.buttonText}>Administrar usuarios</Text>
         </Pressable>
 

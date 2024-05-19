@@ -1,17 +1,18 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
-
 import { createStackNavigator } from "@react-navigation/stack";
-import ChangeUser from "../components/UserStacks/ChangeUser";
-import ChangePassword from "../components/UserStacks/ChangePassword";
 import DataButtonGroup from "../components/UserStacks/DataButtonGroup";
 import AdminDataButtonGroup from "../components/UserStacks/AdminDataButtonGroup";
+import ChangeUser from "../screens/ChangeUser";
+import ChangePassword from "../screens/ChangePassword";
+import ManageUsers from "../screens/ManageUsers";
 
 export type DataStackParamList = {
   DataButtonGroup: undefined;
   AdminDataButtonGroup: undefined;
   ChangeUser: undefined;
   ChangePassword: undefined;
+  ManageUsers: undefined;
 };
 
 const Stack = createStackNavigator<DataStackParamList>();
@@ -19,7 +20,7 @@ const Stack = createStackNavigator<DataStackParamList>();
 const UserDataStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="DataButtonGroup"
+      initialRouteName="AdminDataButtonGroup"
       screenOptions={{
         headerShown: false,
       }}
@@ -31,6 +32,7 @@ const UserDataStack = () => {
         component={AdminDataButtonGroup}
       />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="ManageUsers" component={ManageUsers} />
     </Stack.Navigator>
   );
 };
