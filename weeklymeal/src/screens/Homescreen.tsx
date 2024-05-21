@@ -10,12 +10,6 @@ const Homescreen = () => {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  // Callback function to handle when the menu is generated
-  const handleMenuGenerated = () => {
-    console.log("Menú generado con éxito!");
-    hideModal(); // Close the modal after the menu has been generated
-  };
-
   const containerStyle = { backgroundColor: "white", padding: 20, margin: 40 };
 
   return (
@@ -34,7 +28,7 @@ const Homescreen = () => {
             contentContainerStyle={containerStyle}
           >
             {/* Pass the handleMenuGenerated callback to NewMenu */}
-            <NewMenu onMenuGenerated={handleMenuGenerated} />
+            <NewMenu onCloseModal={hideModal} />
           </Modal>
         </Portal>
         <Pressable style={styles.newMenuButton} onPress={showModal}>

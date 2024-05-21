@@ -11,9 +11,11 @@ const defaultPreferences: Preferences = {
   pescado: 1,
 };
 
-const NewMenu: React.FC<{ onMenuGenerated: () => void }> = ({
-  onMenuGenerated,
-}) => {
+interface NewMenuProps {
+  onCloseModal: () => void;
+}
+
+const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
   const { recipes, setCurrentMenu } = useContext(RecipeContext);
   const [menuType, setMenuType] = useState<"predefined" | "custom">(
     "predefined"
@@ -24,7 +26,7 @@ const NewMenu: React.FC<{ onMenuGenerated: () => void }> = ({
   const updatePreference = (key: keyof Preferences, value: string) => {
     setPreferences((prev) => ({
       ...prev,
-      [key]: parseInt(value) || prev[key], // Ensure invalid input doesn't erase the old value
+      [key]: value === "" ? "" : parseInt(value),
     }));
   };
 
@@ -82,7 +84,7 @@ const NewMenu: React.FC<{ onMenuGenerated: () => void }> = ({
     }));
 
     setCurrentMenu(weeklyMenuItems);
-    onMenuGenerated();
+    onCloseModal();
   };
 
   //TODO: corregir lo de que no se puede poner el número

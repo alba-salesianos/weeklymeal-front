@@ -10,6 +10,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
 import { MenuItem, Recipe } from "../types/RecipeType";
 import { Modal, Portal, Provider, Searchbar } from "react-native-paper";
+import NewMenu from "../components/NewMenu";
 
 const WeeklyMenu = () => {
   const { currentMenu, recipes, setCurrentMenu } = useContext(RecipeContext);
@@ -19,6 +20,7 @@ const WeeklyMenu = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [selectedRecipe, setSelectedRecipe] = useState<MenuItem | null>(null);
   const [searchVisible, setSearchVisible] = useState<boolean>(false);
+  const [newMenuVisible, setNewMenuVisible] = useState<boolean>(false);
 
   const [searchText, setSearchText] = useState("");
 
@@ -38,6 +40,8 @@ const WeeklyMenu = () => {
 
   const hideModal = () => setVisible(false);
   const hideSearchModal = () => setSearchVisible(false);
+  const hideNewMenuModal = () => setNewMenuVisible(false);
+  const showNewMenuModal = () => setNewMenuVisible(true);
 
   const containerStyle = {
     backgroundColor: "white",
@@ -77,24 +81,33 @@ const WeeklyMenu = () => {
   return (
     <Provider>
       <View style={styles.container}>
-        <Button
-          title={
-            editMode ? "Salir del modo de edición" : "Entrar en modo de edición"
-          }
-          onPress={toggleEditMode}
-        />
-        <ScrollView>
-          {localMenu.map(({ day, recipe }, index) => (
-            <Pressable key={index} onPress={() => showModal({ day, recipe })}>
-              <View style={styles.card}>
-                <Text>{day}</Text>
-                <Text style={{ fontWeight: "bold", fontSize: 17 }}>
-                  {recipe.name}
-                </Text>
-              </View>
-            </Pressable>
-          ))}
-        </ScrollView>
+        {currentMenu.length === 0 ? (
+          <Pressable style={styles.newMenuButton} onPress={showNewMenuModal}>
+            <Text style={styles.buttonText}>CREAR MENÚ NUEVO</Text>
+          </Pressable>
+        ) : (
+          <>
+            <Button
+              title={editMode ? "GUARDAR MENÚ" : "EDITAR MENÚ"}
+              onPress={toggleEditMode}
+            />
+            <Button title="Crear Nuevo Menú" onPress={showNewMenuModal} />
+          </>
+        )}
+        {currentMenu.length > 0 && (
+          <ScrollView>
+            {localMenu.map(({ day, recipe }, index) => (
+              <Pressable key={index} onPress={() => showModal({ day, recipe })}>
+                <View style={styles.card}>
+                  <Text>{day}</Text>
+                  <Text style={{ fontWeight: "bold", fontSize: 17 }}>
+                    {recipe.name}
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
+        )}
       </View>
 
       <Portal>
@@ -121,12 +134,12 @@ const WeeklyMenu = () => {
           contentContainerStyle={containerStyle}
           style={{ margin: 40 }}
         >
+          <Searchbar
+            placeholder="Buscar..."
+            onChangeText={setSearchText}
+            value={searchText}
+          />
           <ScrollView>
-            <Searchbar
-              placeholder="Buscar..."
-              onChangeText={setSearchText}
-              value={searchText}
-            />
             {filteredRecipes.map((recipe, index) => (
               <Pressable key={index} onPress={() => handleRecipeChange(recipe)}>
                 <View style={styles.recipeCard}>
@@ -135,6 +148,16 @@ const WeeklyMenu = () => {
               </Pressable>
             ))}
           </ScrollView>
+        </Modal>
+      </Portal>
+
+      <Portal>
+        <Modal
+          visible={newMenuVisible}
+          onDismiss={hideNewMenuModal}
+          contentContainerStyle={containerStyle}
+        >
+          <NewMenu onCloseModal={hideNewMenuModal} />
         </Modal>
       </Portal>
     </Provider>
@@ -165,5 +188,24 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "gray",
+  },
+  newMenuButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginTop: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 60,
+    borderRadius: 10,
+    backgroundColor: "#f08a6e",
+    borderColor: "gray",
+    borderWidth: 1,
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "black",
   },
 });
