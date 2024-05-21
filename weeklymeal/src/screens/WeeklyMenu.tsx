@@ -1,23 +1,44 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+} from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
-import { MenuItem } from "../types/RecipeType";
-import { Modal, Portal, Provider } from "react-native-paper";
-import NewMenu from "../components/NewMenu";
+import { MenuItem, Recipe } from "../types/RecipeType";
+import { Modal, Portal, Provider, Searchbar } from "react-native-paper";
 
 const WeeklyMenu = () => {
-  const { currentMenu } = React.useContext(RecipeContext);
-  const [visible, setVisible] = React.useState<boolean>(false);
-  const [selectedRecipe, setSelectedRecipe] = React.useState<MenuItem | null>(
-    null
-  );
+  const { currentMenu, recipes, setCurrentMenu } = useContext(RecipeContext);
+  const [localMenu, setLocalMenu] = useState<MenuItem[]>([]);
+
+  const [visible, setVisible] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [selectedRecipe, setSelectedRecipe] = useState<MenuItem | null>(null);
+  const [searchVisible, setSearchVisible] = useState<boolean>(false);
+
+  const [searchText, setSearchText] = useState("");
+
+  useEffect(() => {
+    setLocalMenu(currentMenu);
+  }, [currentMenu]);
 
   const showModal = (recipe: MenuItem) => {
-    setSelectedRecipe(recipe);
-    setVisible(true);
+    if (editMode) {
+      setSelectedRecipe(recipe);
+      setSearchVisible(true);
+    } else {
+      setSelectedRecipe(recipe);
+      setVisible(true);
+    }
   };
 
   const hideModal = () => setVisible(false);
+  const hideSearchModal = () => setSearchVisible(false);
+
   const containerStyle = {
     backgroundColor: "white",
     padding: 30,
@@ -25,11 +46,45 @@ const WeeklyMenu = () => {
     borderRadius: 10,
   };
 
+  const handleRecipeChange = (newRecipe: Recipe) => {
+    if (selectedRecipe) {
+      setLocalMenu((prevMenu) =>
+        prevMenu.map((item) =>
+          item.day === selectedRecipe.day
+            ? { ...item, recipe: newRecipe }
+            : item
+        )
+      );
+      hideSearchModal();
+    }
+  };
+
+  const toggleEditMode = () => {
+    if (editMode) {
+      setCurrentMenu(localMenu);
+    }
+    setEditMode(!editMode);
+  };
+
+  const searchRecipe = () => {
+    return recipes.filter((recipe) =>
+      recipe.name.toLowerCase().includes(searchText)
+    );
+  };
+
+  const filteredRecipes = searchRecipe();
+
   return (
     <Provider>
       <View style={styles.container}>
+        <Button
+          title={
+            editMode ? "Salir del modo de edición" : "Entrar en modo de edición"
+          }
+          onPress={toggleEditMode}
+        />
         <ScrollView>
-          {currentMenu.map(({ day, recipe }, index) => (
+          {localMenu.map(({ day, recipe }, index) => (
             <Pressable key={index} onPress={() => showModal({ day, recipe })}>
               <View style={styles.card}>
                 <Text>{day}</Text>
@@ -58,6 +113,30 @@ const WeeklyMenu = () => {
           )}
         </Modal>
       </Portal>
+
+      <Portal>
+        <Modal
+          visible={searchVisible}
+          onDismiss={hideSearchModal}
+          contentContainerStyle={containerStyle}
+          style={{ margin: 40 }}
+        >
+          <ScrollView>
+            <Searchbar
+              placeholder="Buscar..."
+              onChangeText={setSearchText}
+              value={searchText}
+            />
+            {filteredRecipes.map((recipe, index) => (
+              <Pressable key={index} onPress={() => handleRecipeChange(recipe)}>
+                <View style={styles.recipeCard}>
+                  <Text>{recipe.name}</Text>
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </Modal>
+      </Portal>
     </Provider>
   );
 };
@@ -82,7 +161,9 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
   },
-  modalWrapper: {
-    width: "80%",
+  recipeCard: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "gray",
   },
 });

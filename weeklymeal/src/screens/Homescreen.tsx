@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { RecipeContext } from "../contexts/RecipeContext";
 import { Modal, PaperProvider, Portal } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
 import TodayRecipe from "../components/TodayRecipe";
