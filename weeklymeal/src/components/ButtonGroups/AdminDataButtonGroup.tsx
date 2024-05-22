@@ -11,7 +11,7 @@ const AdminDataButtonGroup: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text>Hola, {user.name}</Text>
+      <Text style={styles.greetingText}>Hola, {user.name}</Text>
       <View style={styles.buttonGroup}>
         <Pressable
           style={styles.button}
@@ -33,8 +33,10 @@ const AdminDataButtonGroup: React.FC<Props> = (props) => {
           <Text style={styles.buttonText}>Administrar usuarios</Text>
         </Pressable>
 
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Cerrar sesión</Text>
+        <Pressable style={[styles.button, styles.logoutButton]}>
+          <Text style={[styles.buttonText, styles.logoutButtonText]}>
+            Cerrar sesión
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -47,25 +49,42 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#f5f5f5",
+  },
+  greetingText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#333",
   },
   buttonGroup: {
-    height: 200,
+    width: "100%",
     justifyContent: "space-around",
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
-    alignSelf: "center",
     paddingVertical: 12,
     paddingHorizontal: 80,
     borderRadius: 10,
-    backgroundColor: "royalblue",
+    backgroundColor: "#dbeed0",
+    borderColor: "grey",
+    borderWidth: 1,
+    marginVertical: 10,
   },
   buttonText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: "#333",
+  },
+  logoutButton: {
+    backgroundColor: "#f28966",
+  },
+  logoutButtonText: {
+    color: "#fff",
   },
 });

@@ -1,23 +1,37 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
-//import AddRecipe from "../components/cards/AddRecipe";
 import { Modal, PaperProvider, Portal, Searchbar } from "react-native-paper";
-import AddRecipe from "../components/AddRecipe";
+import { Ionicons } from "@expo/vector-icons";
+import AddRecipe from "../components/Recipes/AddRecipe";
+import { Recipe } from "../types/RecipeType";
 
 const Recipes = () => {
   const { recipes } = useContext(RecipeContext);
 
-  const [visible, setVisible] = React.useState(false);
+  const [addRecipeVisible, setAddRecipeVisible] = useState(false);
+  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
   const [searchText, setSearchText] = React.useState("");
 
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const showAddModal = () => setAddRecipeVisible(true);
+  const hideAddModal = () => setAddRecipeVisible(false);
+
+  const showDetailsModal = (recipe: Recipe) => {
+    setSelectedRecipe(recipe);
+    setDetailsVisible(true);
+  };
+  const hideDetailsModal = () => {
+    setSelectedRecipe(null);
+    setDetailsVisible(false);
+  };
+
   const containerStyle = { backgroundColor: "white", margin: 40 };
 
   const searchRecipe = () => {
     return recipes.filter((recipe) =>
-      recipe.name.toLowerCase().includes(searchText)
+      recipe.name.toLowerCase().includes(searchText.toLowerCase())
     );
   };
 
@@ -25,14 +39,35 @@ const Recipes = () => {
 
   return (
     <PaperProvider>
-      <View>
+      <View style={styles.container}>
         <Portal>
           <Modal
-            visible={visible}
-            onDismiss={hideModal}
+            visible={addRecipeVisible}
+            onDismiss={hideAddModal}
             contentContainerStyle={containerStyle}
           >
             <AddRecipe />
+          </Modal>
+
+          <Modal
+            visible={detailsVisible}
+            onDismiss={hideDetailsModal}
+            contentContainerStyle={styles.modalContainer}
+          >
+            {selectedRecipe && (
+              <View style={styles.detailsContainer}>
+                <Text style={styles.modalTitle}>{selectedRecipe.name}</Text>
+                <Text style={styles.modalDescription}>
+                  {selectedRecipe.description}
+                </Text>
+                <Text style={styles.modalSectionTitle}>Ingredientes</Text>
+                <Text style={styles.modalText}>
+                  {selectedRecipe.ingredients}
+                </Text>
+                <Text style={styles.modalSectionTitle}>Pasos</Text>
+                <Text style={styles.modalText}>{selectedRecipe.steps}</Text>
+              </View>
+            )}
           </Modal>
         </Portal>
 
@@ -41,16 +76,21 @@ const Recipes = () => {
           onChangeText={setSearchText}
           value={searchText}
         />
-        <Pressable style={styles.button} onPress={showModal}>
-          <Text>Añadir receta</Text>
+        <Pressable
+          style={styles.floatingButtonContainer}
+          onPress={showAddModal}
+        >
+          <Ionicons name="add-outline" size={20} color="#000" />
         </Pressable>
         <ScrollView>
           {filteredRecipes &&
             filteredRecipes.map((recipe, index) => (
               <View key={index} style={styles.card}>
-                <Text>{recipe.name}</Text>
-                <Text>{recipe.label}</Text>
-                <Text>{recipe.description}</Text>
+                <Text style={styles.title}>{recipe.name}</Text>
+                <Text style={styles.description}>{recipe.description}</Text>
+                <Pressable onPress={() => showDetailsModal(recipe)}>
+                  <Text style={styles.detailsLink}>Ver detalles</Text>
+                </Pressable>
               </View>
             ))}
         </ScrollView>
@@ -63,32 +103,98 @@ export default Recipes;
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#f5f5f5",
   },
   card: {
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    marginTop: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 60,
-    borderRadius: 10,
-    backgroundColor: "#f8d7d2",
-    borderColor: "gray",
-    borderWidth: 1,
+    width: "100%",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    marginTop: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 60,
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 12,
+  },
+  floatingButtonContainer: {
+    position: "absolute",
+    bottom: 50,
+    right: 30,
+    padding: 15,
+    backgroundColor: "#fff0e7",
+    borderRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+    zIndex: 1000,
+  },
+  detailsLink: {
+    color: "green",
+    marginTop: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginTop: 10,
+    marginBottom: 6,
+  },
+  text: {
+    fontSize: 16,
+    color: "#555",
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    padding: 20,
+    marginHorizontal: 20,
     borderRadius: 10,
-    borderColor: "gray",
-    borderWidth: 1,
-    backgroundColor: "#f8d7d2",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  detailsContainer: {
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
+  },
+  modalDescription: {
+    fontSize: 18,
+    color: "#666",
+    marginBottom: 20,
+  },
+  modalSectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+    marginTop: 10,
+    marginBottom: 6,
+  },
+  modalText: {
+    fontSize: 16,
+    color: "#555",
+    textAlign: "center",
+    marginBottom: 10,
   },
 });

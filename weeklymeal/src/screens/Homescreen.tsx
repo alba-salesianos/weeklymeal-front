@@ -1,38 +1,57 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Modal, PaperProvider, Portal } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
-import TodayRecipe from "../components/TodayRecipe";
+import TodayRecipe from "../components/Recipes/TodayRecipe";
+import AddRecipe from "../components/Recipes/AddRecipe";
+
 
 const Homescreen = () => {
-  const [visible, setVisible] = React.useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [recipeVisible, setRecipeVisible] = useState(false);
 
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const showMenuModal = () => setMenuVisible(true);
+  const hideMenuModal = () => setMenuVisible(false);
 
-  const containerStyle = { backgroundColor: "white", padding: 20, margin: 40 };
+  const showRecipeModal = () => setRecipeVisible(true);
+  const hideRecipeModal = () => setRecipeVisible(false);
+
+  const containerStyle = {
+    backgroundColor: "white",
+    padding: 30,
+    margin: 20,
+    borderRadius: 10,
+  };
 
   return (
     <PaperProvider>
       <View style={styles.container}>
         <TodayRecipe />
         <View>
-          <Pressable style={styles.buttonRecipe}>
-            <Text style={styles.buttonText}>Ver receta</Text>
+          <Portal>
+            <Modal
+              visible={recipeVisible}
+              onDismiss={hideRecipeModal}
+              contentContainerStyle={containerStyle}
+            >
+              <AddRecipe />
+            </Modal>
+          </Portal>
+          <Pressable style={styles.buttonRecipe} onPress={showRecipeModal}>
+            <Text style={styles.buttonText}>Añadir receta</Text>
           </Pressable>
         </View>
         <Portal>
           <Modal
-            visible={visible}
-            onDismiss={hideModal}
+            visible={menuVisible}
+            onDismiss={hideMenuModal}
             contentContainerStyle={containerStyle}
           >
-            {/* Pass the handleMenuGenerated callback to NewMenu */}
-            <NewMenu onCloseModal={hideModal} />
+            <NewMenu onCloseModal={hideMenuModal} />
           </Modal>
         </Portal>
-        <Pressable style={styles.newMenuButton} onPress={showModal}>
-          <Text style={styles.buttonText}>CREAR MENÚ NUEVO</Text>
+        <Pressable style={styles.newMenuButton} onPress={showMenuModal}>
+          <Text style={styles.buttonText}>Crear menú nuevo</Text>
         </Pressable>
       </View>
     </PaperProvider>
@@ -54,9 +73,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginTop: 20,
-    paddingVertical: 12,
+    paddingVertical: 15,
     paddingHorizontal: 60,
-    borderRadius: 10,
+    borderRadius: 15,
     borderColor: "gray",
     borderWidth: 1,
   },
@@ -65,10 +84,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginTop: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 60,
-    borderRadius: 10,
-    backgroundColor: "#f08a6e",
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 15,
+    backgroundColor: "#dbeed0",
     borderColor: "gray",
     borderWidth: 1,
   },

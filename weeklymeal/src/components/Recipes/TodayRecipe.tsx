@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import { MenuItem, Recipe } from "../types/RecipeType";
-import { RecipeContext } from "../contexts/RecipeContext";
+
 import moment from "moment";
+import { RecipeContext } from "../../contexts/RecipeContext";
+import { MenuItem, Recipe } from "../../types/RecipeType";
 
 const TodayRecipe = () => {
   const { currentMenu } = React.useContext(RecipeContext);
@@ -38,7 +39,12 @@ const TodayRecipe = () => {
 
   return (
     <View>
-      <Text style={styles.title}>Hoy toca: {todaysRecipe.name} </Text>
+      <Text style={styles.title}>
+        {" "}
+        {currentMenu.length > 1
+          ? `Hoy toca:  ${todaysRecipe.name}`
+          : "No se ha generado menú"}
+      </Text>
     </View>
   );
 };
@@ -51,7 +57,7 @@ const styles = StyleSheet.create({
     margin: 30,
     padding: 20,
     textAlign: "center",
-    fontSize: 40,
+    fontSize: 35,
     fontWeight: "500",
     backgroundColor: "white",
     borderWidth: 1,

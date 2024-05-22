@@ -1,11 +1,12 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import DataButtonGroup from "../components/UserStacks/DataButtonGroup";
-import AdminDataButtonGroup from "../components/UserStacks/AdminDataButtonGroup";
+
 import ChangeUser from "../screens/ChangeUser";
 import ChangePassword from "../screens/ChangePassword";
 import ManageUsers from "../screens/ManageUsers";
+import AdminDataButtonGroup from "../components/ButtonGroups/AdminDataButtonGroup";
+import DataButtonGroup from "../components/ButtonGroups/DataButtonGroup";
 
 export type DataStackParamList = {
   DataButtonGroup: undefined;
@@ -38,5 +39,3 @@ const UserDataStack = () => {
 };
 
 export default UserDataStack;
-
-const styles = StyleSheet.create({});

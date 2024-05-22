@@ -4,7 +4,10 @@ import { Appbar } from "react-native-paper";
 
 const Header = () => {
   return (
-    <Appbar.Header mode={"center-aligned"}>
+    <Appbar.Header
+      mode={"center-aligned"}
+      style={{ backgroundColor: "#FFF0e7" }}
+    >
       <Appbar.Content title="Meal Planner" />
     </Appbar.Header>
   );

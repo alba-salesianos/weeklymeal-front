@@ -46,7 +46,7 @@ const WeeklyMenu = () => {
   const containerStyle = {
     backgroundColor: "white",
     padding: 30,
-    margin: 0,
+    margin: 20,
     borderRadius: 10,
   };
 
@@ -83,16 +83,20 @@ const WeeklyMenu = () => {
       <View style={styles.container}>
         {currentMenu.length === 0 ? (
           <Pressable style={styles.newMenuButton} onPress={showNewMenuModal}>
-            <Text style={styles.buttonText}>CREAR MENÚ NUEVO</Text>
+            <Text style={styles.buttonText}>Crear menú nuevo</Text>
           </Pressable>
         ) : (
-          <>
-            <Button
-              title={editMode ? "GUARDAR MENÚ" : "EDITAR MENÚ"}
-              onPress={toggleEditMode}
-            />
-            <Button title="Crear Nuevo Menú" onPress={showNewMenuModal} />
-          </>
+          <View style={styles.buttonGroup}>
+            <Pressable style={styles.editMenu} onPress={toggleEditMode}>
+              <Text style={styles.buttonText}>
+                {editMode ? "Dejar de editar" : "Editar menú"}
+              </Text>
+            </Pressable>
+
+            <Pressable style={styles.newMenuButton} onPress={showNewMenuModal}>
+              <Text style={styles.buttonText}>Crear menú nuevo</Text>
+            </Pressable>
+          </View>
         )}
         {currentMenu.length > 0 && (
           <ScrollView>
@@ -194,10 +198,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginTop: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 60,
-    borderRadius: 10,
-    backgroundColor: "#f08a6e",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+    backgroundColor: "#dbeed0",
+    borderColor: "gray",
+    borderWidth: 1,
+  },
+
+  editMenu: {
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginTop: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+    backgroundColor: "#dbeed0",
     borderColor: "gray",
     borderWidth: 1,
   },
@@ -207,5 +224,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "black",
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "90%",
+    marginTop: 20,
   },
 });

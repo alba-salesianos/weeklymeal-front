@@ -1,8 +1,8 @@
 import { StyleSheet, TextInput, View, Text, Pressable } from "react-native";
 import React from "react";
 import { Menu } from "react-native-paper";
-import { RecipeContext } from "../contexts/RecipeContext";
-import { Recipe } from "../types/RecipeType";
+import { RecipeContext } from "../../contexts/RecipeContext";
+import { Recipe } from "../../types/RecipeType";
 
 const AddRecipe = () => {
   const { setRecipes } = React.useContext(RecipeContext);
@@ -11,11 +11,13 @@ const AddRecipe = () => {
     setRecipes((prevState: Recipe[]) => [...prevState, recipe]);
   };
 
+  //TODO: ver que demonios hago con la proteína esta
+
   const [recipe, setRecipe] = React.useState<Recipe>({
     idRecipe: "",
     name: "",
     description: "",
-    label: "",
+    label: "proteína",
     ingredients: "",
     steps: "",
   });
@@ -67,6 +69,10 @@ const AddRecipe = () => {
           onPress={() => handleTypeSelect("Proteína")}
           title="Proteína"
         />
+        <Menu.Item
+          onPress={() => handleTypeSelect("Pescado")}
+          title="Pescado"
+        />
         <Menu.Item onPress={() => handleTypeSelect("Fibra")} title="Fibra" />
         <Menu.Item
           onPress={() => handleTypeSelect("Hidratos")}
@@ -95,7 +101,7 @@ const AddRecipe = () => {
       />
 
       <Pressable style={styles.button} onPress={addRecipe}>
-        <Text>Añadir receta</Text>
+        <Text>Añadir</Text>
       </Pressable>
     </View>
   );
@@ -115,12 +121,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 60,
     borderRadius: 10,
-    backgroundColor: "#f8d7d2",
+    backgroundColor: "#dbeed0",
+    borderColor: "gray",
+    borderWidth: 1,
   },
   inputs: {
     marginTop: 10,
     marginBottom: 20,
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
     borderColor: "gray",
