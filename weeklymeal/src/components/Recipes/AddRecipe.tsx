@@ -11,13 +11,11 @@ const AddRecipe = () => {
     setRecipes((prevState: Recipe[]) => [...prevState, recipe]);
   };
 
-  //TODO: ver que demonios hago con la proteína esta
-
   const [recipe, setRecipe] = React.useState<Recipe>({
     idRecipe: "",
     name: "",
     description: "",
-    label: "proteína",
+    label: "" as "hidratos" | "fibra" | "proteína" | "pescado",
     ingredients: "",
     steps: "",
   });

@@ -3,7 +3,7 @@ import React from "react";
 import { UserInfoContext } from "../../contexts/UserInfoContext";
 import type { StackScreenProps } from "@react-navigation/stack";
 
-import userService from "../../services/menu.service";
+import userService from "../../services/recipes.service";
 import Container, { Toast } from "toastify-react-native";
 import { RootStackParamList } from "./AuthHomepage";
 

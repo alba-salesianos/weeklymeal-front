@@ -11,12 +11,12 @@ function RecipeProvider(props: RecipeProviderProps) {
   const { children } = props;
 
   let recipeDefault: Recipe = {
-    idRecipe: "123456",
-    name: "AAA",
-    description: "BBB",
-    label: "CCC",
-    ingredients: "DDD",
-    steps: "EEE",
+    idRecipe: "",
+    name: "",
+    description: "",
+    label: "" as "hidratos" | "fibra" | "proteína" | "pescado",
+    ingredients: "",
+    steps: "",
   };
 
   const [recipe, setRecipe] = React.useState(recipeDefault);

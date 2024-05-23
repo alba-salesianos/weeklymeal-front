@@ -1,12 +1,13 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Modal, PaperProvider, Portal } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
 import TodayRecipe from "../components/Recipes/TodayRecipe";
 import AddRecipe from "../components/Recipes/AddRecipe";
-
+import { RecipeContext } from "../contexts/RecipeContext";
 
 const Homescreen = () => {
+  const { recipes } = useContext(RecipeContext);
   const [menuVisible, setMenuVisible] = useState(false);
   const [recipeVisible, setRecipeVisible] = useState(false);
 
@@ -41,6 +42,11 @@ const Homescreen = () => {
             <Text style={styles.buttonText}>Añadir receta</Text>
           </Pressable>
         </View>
+        {recipes.length < 7 && (
+          <Text style={styles.infoText}>
+            Añade al menos 7 recetas para crear un menú nuevo.
+          </Text>
+        )}
         <Portal>
           <Modal
             visible={menuVisible}
@@ -50,7 +56,14 @@ const Homescreen = () => {
             <NewMenu onCloseModal={hideMenuModal} />
           </Modal>
         </Portal>
-        <Pressable style={styles.newMenuButton} onPress={showMenuModal}>
+        <Pressable
+          style={[
+            styles.newMenuButton,
+            recipes.length < 7 && styles.disabledButton,
+          ]}
+          onPress={recipes.length >= 7 ? showMenuModal : null}
+          disabled={recipes.length < 7}
+        >
           <Text style={styles.buttonText}>Crear menú nuevo</Text>
         </Pressable>
       </View>
@@ -91,11 +104,20 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
   },
+  disabledButton: {
+    backgroundColor: "gray",
+    borderColor: "darkgray",
+  },
   buttonText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "black",
+  },
+  infoText: {
+    marginTop: 10,
+    fontSize: 14,
+    color: "red",
   },
 });
