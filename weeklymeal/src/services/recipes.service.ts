@@ -14,10 +14,12 @@ const createRecipe = async (recipe: Recipe) => {
 };
 
 const updateRecipe = async (recipe: Recipe) => {
-  const response = await axios.put(
-    `${API_URL}/recipe/${recipe.idRecipe}`,
-    recipe
-  );
+  const response = await axios.put(`${API_URL}/recipe/${recipe.id}`, recipe);
+  return response.data;
+};
+
+const deleteRecipe = async (recipeId: number) => {
+  const response = await axios.delete(`${API_URL}/recipe/${recipeId}`);
   return response.data;
 };
 
@@ -25,6 +27,7 @@ const RecipeService = {
   getAllRecipes,
   createRecipe,
   updateRecipe,
+  deleteRecipe,
 };
 
 export default RecipeService;

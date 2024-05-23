@@ -16,7 +16,7 @@ const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
   const isEditing = Boolean(initialRecipe);
 
   const [recipe, setRecipe] = React.useState<Recipe>({
-    idRecipe: undefined,
+    id: undefined,
     name: "",
     description: "",
     label: "" as "hidratos" | "fibra" | "proteína" | "pescado",
@@ -35,9 +35,7 @@ const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
       if (isEditing) {
         const updatedRecipe = await RecipeService.updateRecipe(recipe);
         setRecipes((prevState: Recipe[]) =>
-          prevState.map((r) =>
-            r.idRecipe === recipe.idRecipe ? updatedRecipe : r
-          )
+          prevState.map((r) => (r.id === recipe.id ? updatedRecipe : r))
         );
       } else {
         const newRecipe = await RecipeService.createRecipe(recipe);

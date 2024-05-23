@@ -7,6 +7,7 @@ import AddRecipe from "../components/Recipes/AddRecipe";
 
 import { Recipe } from "../types/RecipeType";
 import RecipeDetails from "../components/Recipes/RecipeDetails";
+import RecipeService from "../services/recipes.service";
 
 const Recipes = () => {
   const { recipes, setRecipes } = useContext(RecipeContext);
@@ -21,6 +22,7 @@ const Recipes = () => {
   const hideAddModal = () => setAddRecipeVisible(false);
 
   const showDetailsModal = (recipe: Recipe) => {
+    console.log("Selected Recipe:", recipe);
     setSelectedRecipe(recipe);
     setDetailsVisible(true);
   };
@@ -34,13 +36,19 @@ const Recipes = () => {
     setDetailsVisible(false);
   };
 
-  const handleDeleteRecipe = () => {
-    if (selectedRecipe) {
-      const updatedRecipes = recipes.filter(
-        (recipe) => recipe.idRecipe !== selectedRecipe.idRecipe
-      );
-      setRecipes(updatedRecipes);
-      hideDetailsModal();
+  const handleDeleteRecipe = async () => {
+    if (selectedRecipe && selectedRecipe.id !== undefined) {
+      try {
+        await RecipeService.deleteRecipe(selectedRecipe.id);
+        setRecipes((prevState: Recipe[]) =>
+          prevState.filter(
+            (recipeToDelete) => recipeToDelete.id !== selectedRecipe.id
+          )
+        );
+        hideDetailsModal();
+      } catch (error) {
+        console.error("Error deleting recipe:", error);
+      }
     }
   };
 

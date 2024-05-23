@@ -1,5 +1,5 @@
 export type Recipe = {
-  idRecipe: number | undefined;
+  id: number | undefined;
   name: string;
   description: string;
   label: "hidratos" | "fibra" | "proteína" | "pescado";
