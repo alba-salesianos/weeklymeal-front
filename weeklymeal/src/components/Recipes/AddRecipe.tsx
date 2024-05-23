@@ -1,18 +1,22 @@
 import { StyleSheet, TextInput, View, Text, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Menu } from "react-native-paper";
 import { RecipeContext } from "../../contexts/RecipeContext";
 import { Recipe } from "../../types/RecipeType";
+import RecipeService from "../../services/recipes.service";
 
-const AddRecipe = () => {
+interface AddRecipeProps {
+  initialRecipe?: Recipe | null;
+  onClose: () => void;
+}
+
+const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
   const { setRecipes } = React.useContext(RecipeContext);
 
-  const addRecipe = () => {
-    setRecipes((prevState: Recipe[]) => [...prevState, recipe]);
-  };
+  const isEditing = Boolean(initialRecipe);
 
   const [recipe, setRecipe] = React.useState<Recipe>({
-    idRecipe: "",
+    idRecipe: undefined,
     name: "",
     description: "",
     label: "" as "hidratos" | "fibra" | "proteína" | "pescado",
@@ -20,12 +24,39 @@ const AddRecipe = () => {
     steps: "",
   });
 
+  useEffect(() => {
+    if (initialRecipe) {
+      setRecipe(initialRecipe);
+    }
+  }, [initialRecipe]);
+
+  const handleSaveRecipe = async () => {
+    try {
+      if (isEditing) {
+        const updatedRecipe = await RecipeService.updateRecipe(recipe);
+        setRecipes((prevState: Recipe[]) =>
+          prevState.map((r) =>
+            r.idRecipe === recipe.idRecipe ? updatedRecipe : r
+          )
+        );
+      } else {
+        const newRecipe = await RecipeService.createRecipe(recipe);
+        setRecipes((prevState: Recipe[]) => [...prevState, newRecipe]);
+      }
+      onClose();
+    } catch (error) {
+      console.error("Error saving recipe:", error);
+    }
+  };
+
   const [typeMenuVisible, setTypeMenuVisible] = React.useState(false);
 
-  const handleTypeSelect = (type: string) => {
+  const handleTypeSelect = (
+    type: "hidratos" | "fibra" | "proteína" | "pescado"
+  ) => {
     setRecipe((prevState) => ({
       ...prevState,
-      type,
+      label: type,
     }));
     setTypeMenuVisible(false);
   };
@@ -64,16 +95,16 @@ const AddRecipe = () => {
         }
       >
         <Menu.Item
-          onPress={() => handleTypeSelect("Proteína")}
+          onPress={() => handleTypeSelect("proteína")}
           title="Proteína"
         />
         <Menu.Item
-          onPress={() => handleTypeSelect("Pescado")}
+          onPress={() => handleTypeSelect("pescado")}
           title="Pescado"
         />
-        <Menu.Item onPress={() => handleTypeSelect("Fibra")} title="Fibra" />
+        <Menu.Item onPress={() => handleTypeSelect("fibra")} title="Fibra" />
         <Menu.Item
-          onPress={() => handleTypeSelect("Hidratos")}
+          onPress={() => handleTypeSelect("hidratos")}
           title="Hidratos"
         />
       </Menu>
@@ -81,7 +112,7 @@ const AddRecipe = () => {
       <Text>Ingredientes</Text>
       <TextInput
         style={styles.inputs}
-        placeholder="Inserte indredientes..."
+        placeholder="Inserte ingredientes..."
         value={recipe.ingredients}
         onChangeText={(text) =>
           setRecipe((prevState) => ({ ...prevState, ingredients: text }))
@@ -98,8 +129,8 @@ const AddRecipe = () => {
         }
       />
 
-      <Pressable style={styles.button} onPress={addRecipe}>
-        <Text>Añadir</Text>
+      <Pressable style={styles.button} onPress={handleSaveRecipe}>
+        <Text>{isEditing ? "Guardar" : "Añadir"}</Text>
       </Pressable>
     </View>
   );

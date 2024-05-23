@@ -4,16 +4,18 @@ import { RecipeContext } from "../contexts/RecipeContext";
 import { Modal, PaperProvider, Portal, Searchbar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import AddRecipe from "../components/Recipes/AddRecipe";
+
 import { Recipe } from "../types/RecipeType";
+import RecipeDetails from "../components/Recipes/RecipeDetails";
 
 const Recipes = () => {
-  const { recipes } = useContext(RecipeContext);
+  const { recipes, setRecipes } = useContext(RecipeContext);
 
   const [addRecipeVisible, setAddRecipeVisible] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
-  const [searchText, setSearchText] = React.useState("");
+  const [searchText, setSearchText] = useState("");
 
   const showAddModal = () => setAddRecipeVisible(true);
   const hideAddModal = () => setAddRecipeVisible(false);
@@ -25,6 +27,21 @@ const Recipes = () => {
   const hideDetailsModal = () => {
     setSelectedRecipe(null);
     setDetailsVisible(false);
+  };
+
+  const handleEditRecipe = () => {
+    setAddRecipeVisible(true);
+    setDetailsVisible(false);
+  };
+
+  const handleDeleteRecipe = () => {
+    if (selectedRecipe) {
+      const updatedRecipes = recipes.filter(
+        (recipe) => recipe.idRecipe !== selectedRecipe.idRecipe
+      );
+      setRecipes(updatedRecipes);
+      hideDetailsModal();
+    }
   };
 
   const containerStyle = { backgroundColor: "white", margin: 40 };
@@ -46,28 +63,7 @@ const Recipes = () => {
             onDismiss={hideAddModal}
             contentContainerStyle={containerStyle}
           >
-            <AddRecipe />
-          </Modal>
-
-          <Modal
-            visible={detailsVisible}
-            onDismiss={hideDetailsModal}
-            contentContainerStyle={styles.modalContainer}
-          >
-            {selectedRecipe && (
-              <View style={styles.detailsContainer}>
-                <Text style={styles.modalTitle}>{selectedRecipe.name}</Text>
-                <Text style={styles.modalDescription}>
-                  {selectedRecipe.description}
-                </Text>
-                <Text style={styles.modalSectionTitle}>Ingredientes</Text>
-                <Text style={styles.modalText}>
-                  {selectedRecipe.ingredients}
-                </Text>
-                <Text style={styles.modalSectionTitle}>Pasos</Text>
-                <Text style={styles.modalText}>{selectedRecipe.steps}</Text>
-              </View>
-            )}
+            <AddRecipe initialRecipe={selectedRecipe} onClose={hideAddModal} />
           </Modal>
         </Portal>
 
@@ -78,7 +74,10 @@ const Recipes = () => {
         />
         <Pressable
           style={styles.floatingButtonContainer}
-          onPress={showAddModal}
+          onPress={() => {
+            setSelectedRecipe(null);
+            showAddModal();
+          }}
         >
           <Ionicons name="add-outline" size={20} color="#000" />
         </Pressable>
@@ -94,6 +93,13 @@ const Recipes = () => {
               </View>
             ))}
         </ScrollView>
+        <RecipeDetails
+          visible={detailsVisible}
+          onDismiss={hideDetailsModal}
+          recipe={selectedRecipe}
+          onEdit={handleEditRecipe}
+          onDelete={handleDeleteRecipe}
+        />
       </View>
     </PaperProvider>
   );
@@ -147,17 +153,6 @@ const styles = StyleSheet.create({
   detailsLink: {
     color: "green",
     marginTop: 10,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-    marginTop: 10,
-    marginBottom: 6,
-  },
-  text: {
-    fontSize: 16,
-    color: "#555",
   },
   modalContainer: {
     backgroundColor: "white",

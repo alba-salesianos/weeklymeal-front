@@ -5,9 +5,10 @@ import NewMenu from "../components/NewMenu";
 import TodayRecipe from "../components/Recipes/TodayRecipe";
 import AddRecipe from "../components/Recipes/AddRecipe";
 import { RecipeContext } from "../contexts/RecipeContext";
+import RecipeService from "../services/recipes.service";
 
 const Homescreen = () => {
-  const { recipes } = useContext(RecipeContext);
+  const { recipes, setRecipes } = useContext(RecipeContext);
   const [menuVisible, setMenuVisible] = useState(false);
   const [recipeVisible, setRecipeVisible] = useState(false);
 
@@ -24,6 +25,19 @@ const Homescreen = () => {
     borderRadius: 10,
   };
 
+  React.useEffect(() => {
+    async function retrieveRecipes() {
+      try {
+        const data = await RecipeService.getAllRecipes();
+        setRecipes(data);
+        console.log("recetas obtenidas correctamente");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    retrieveRecipes();
+  }, []);
+
   return (
     <PaperProvider>
       <View style={styles.container}>
@@ -35,7 +49,7 @@ const Homescreen = () => {
               onDismiss={hideRecipeModal}
               contentContainerStyle={containerStyle}
             >
-              <AddRecipe />
+              <AddRecipe onClose={hideRecipeModal} />
             </Modal>
           </Portal>
           <Pressable style={styles.buttonRecipe} onPress={showRecipeModal}>

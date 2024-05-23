@@ -1,18 +1,30 @@
-const RECIPE_API = "http://localhost:8082/api/v1/";
+import axios from "axios";
+import { Recipe } from "../types/RecipeType";
 
-const getAllRecipes = async () => {};
+const API_URL = "http://192.168.137.1:8082/api/v1";
 
-/* const getInitRequest = (httpVerb: string, user: UserInfo) => {
-  const init: RequestInit = {
-    method: httpVerb,
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify(user),
-  };
-  return init;
-}; */
-
-const userService = {
-  getAllRecipes,
+const getAllRecipes = async () => {
+  const response = await axios(`${API_URL}/recipes/2`);
+  return response.data;
 };
 
-export default userService;
+const createRecipe = async (recipe: Recipe) => {
+  const response = await axios.post(`${API_URL}/recipe/2`, recipe);
+  return response.data;
+};
+
+const updateRecipe = async (recipe: Recipe) => {
+  const response = await axios.put(
+    `${API_URL}/recipe/${recipe.idRecipe}`,
+    recipe
+  );
+  return response.data;
+};
+
+const RecipeService = {
+  getAllRecipes,
+  createRecipe,
+  updateRecipe,
+};
+
+export default RecipeService;
