@@ -24,12 +24,15 @@ const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
     steps: "",
   });
 
+  // If an initialRecipe is provided for its editing, it will set it in setRecipe
   useEffect(() => {
     if (initialRecipe) {
       setRecipe(initialRecipe);
     }
   }, [initialRecipe]);
 
+  // Function that handles saving a recipe. It checks if the recipe is being edited or created,
+  // makes the appropriate API call, updates the state, and closes the modal.
   const handleSaveRecipe = async () => {
     try {
       if (isEditing) {
@@ -49,6 +52,7 @@ const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
 
   const [typeMenuVisible, setTypeMenuVisible] = React.useState(false);
 
+  // Function that handles selecting a recipe type from the menu
   const handleTypeSelect = (
     type: "hidratos" | "fibra" | "proteína" | "pescado"
   ) => {

@@ -17,7 +17,7 @@ export type DataStackParamList = {
 
 const Stack = createStackNavigator<DataStackParamList>();
 
-//This is the Stack with the different screens inside of the UserScreen section.
+//Stack with the different screens inside of the UserScreen section.
 
 const UserDataStack = () => {
   return (

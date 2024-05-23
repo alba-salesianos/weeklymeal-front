@@ -1,48 +1,34 @@
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-} from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useContext, useState } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
-import { MenuItem, Recipe } from "../types/RecipeType";
+import { Recipe } from "../types/RecipeType";
 import { Modal, Portal, Provider, Searchbar } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
 
 const WeeklyMenu = () => {
   const { currentMenu, recipes, setCurrentMenu } = useContext(RecipeContext);
-  const [localMenu, setLocalMenu] = useState<MenuItem[]>([]);
 
+  // States that manage the visibility for the modals, the edit mode, the selected recipe, and the search text
   const [visible, setVisible] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [selectedRecipe, setSelectedRecipe] = useState<MenuItem | null>(null);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [searchVisible, setSearchVisible] = useState<boolean>(false);
   const [newMenuVisible, setNewMenuVisible] = useState<boolean>(false);
-
   const [searchText, setSearchText] = useState("");
 
-  useEffect(() => {
-    setLocalMenu(currentMenu);
-  }, [currentMenu]);
-
-  const showModal = (recipe: MenuItem) => {
-    if (editMode) {
-      setSelectedRecipe(recipe);
-      setSearchVisible(true);
-    } else {
-      setSelectedRecipe(recipe);
-      setVisible(true);
-    }
+  // Function to show the recipe details or search modal
+  const showModal = (recipe: Recipe) => {
+    setSelectedRecipe(recipe);
+    setSearchVisible(true);
   };
 
+  // Functions to hide the modals
   const hideModal = () => setVisible(false);
   const hideSearchModal = () => setSearchVisible(false);
   const hideNewMenuModal = () => setNewMenuVisible(false);
   const showNewMenuModal = () => setNewMenuVisible(true);
 
+  // Style for the modals
   const containerStyle = {
     backgroundColor: "white",
     padding: 30,
@@ -50,29 +36,28 @@ const WeeklyMenu = () => {
     borderRadius: 10,
   };
 
+  // Function that handles when the user changes a recipe in the menu, looping through CurrentMenu and only changing the recipe
+  // that is selected at that time when pressing on it.
   const handleRecipeChange = (newRecipe: Recipe) => {
     if (selectedRecipe) {
-      setLocalMenu((prevMenu) =>
-        prevMenu.map((item) =>
-          item.day === selectedRecipe.day
-            ? { ...item, recipe: newRecipe }
-            : item
+      setCurrentMenu((prevMenu: Recipe[]) =>
+        prevMenu.map((recipe) =>
+          recipe.id === selectedRecipe.id ? newRecipe : recipe
         )
       );
       hideSearchModal();
     }
   };
 
+  // Function to toggle edit mode
   const toggleEditMode = () => {
-    if (editMode) {
-      setCurrentMenu(localMenu);
-    }
     setEditMode(!editMode);
   };
 
+  // Function that filters recipes based on input text
   const searchRecipe = () => {
     return recipes.filter((recipe) =>
-      recipe.name.toLowerCase().includes(searchText)
+      recipe.name.toLowerCase().includes(searchText.toLowerCase())
     );
   };
 
@@ -88,6 +73,7 @@ const WeeklyMenu = () => {
                 Añade al menos 7 recetas para crear un menú semanal.
               </Text>
             )}
+           {/* Button to create a new menu, disabled if there are less than 7 recipes */}
             <Pressable
               style={[
                 styles.newMenuButton,
@@ -101,12 +87,15 @@ const WeeklyMenu = () => {
           </>
         ) : (
           <View style={styles.buttonGroup}>
+         
             <Pressable style={styles.editMenu} onPress={toggleEditMode}>
               <Text style={styles.buttonText}>
                 {editMode ? "Dejar de editar" : "Editar menú"}
               </Text>
             </Pressable>
 
+            {/* Button to create a new menu; this one will never be disabled cause for this one to appear there has to be 
+            a menu */}
             <Pressable style={styles.newMenuButton} onPress={showNewMenuModal}>
               <Text style={styles.buttonText}>Crear menú nuevo</Text>
             </Pressable>
@@ -114,10 +103,10 @@ const WeeklyMenu = () => {
         )}
         {currentMenu.length > 0 && (
           <ScrollView>
-            {localMenu.map(({ day, recipe }, index) => (
-              <Pressable key={index} onPress={() => showModal({ day, recipe })}>
+         
+            {currentMenu.map((recipe, index) => (
+              <Pressable key={index} onPress={() => showModal(recipe)}>
                 <View style={styles.card}>
-                  <Text>{day}</Text>
                   <Text style={{ fontWeight: "bold", fontSize: 17 }}>
                     {recipe.name}
                   </Text>
@@ -128,6 +117,7 @@ const WeeklyMenu = () => {
         )}
       </View>
 
+      {/* Modal to show recipe details */}
       <Portal>
         <Modal
           visible={visible}
@@ -137,14 +127,14 @@ const WeeklyMenu = () => {
         >
           {selectedRecipe && (
             <View>
-              <Text>{selectedRecipe.day}</Text>
-              <Text>{selectedRecipe.recipe.name}</Text>
-              <Text>{selectedRecipe.recipe.description}</Text>
+              <Text>{selectedRecipe.name}</Text>
+              <Text>{selectedRecipe.description}</Text>
             </View>
           )}
         </Modal>
       </Portal>
 
+      {/* Modal to search and select a new recipe */}
       <Portal>
         <Modal
           visible={searchVisible}
@@ -169,6 +159,7 @@ const WeeklyMenu = () => {
         </Modal>
       </Portal>
 
+      {/* Modal to create a new menu */}
       <Portal>
         <Modal
           visible={newMenuVisible}
@@ -219,7 +210,6 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
   },
-
   editMenu: {
     alignItems: "center",
     justifyContent: "center",

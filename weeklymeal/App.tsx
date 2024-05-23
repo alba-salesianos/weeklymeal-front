@@ -9,6 +9,7 @@ import AuthHomepage from "./src/navigation/AuthHomepage";
 import UserInfoProvider from "./src/providers/UserInfoProvider";
 import AppNavigationContainer from "./src/navigation/NavigationContainer";
 
+// Main App of the application, with all the Providers and the custom NavigationContainer
 export default function App() {
   return (
     <AppNavigationContainer>

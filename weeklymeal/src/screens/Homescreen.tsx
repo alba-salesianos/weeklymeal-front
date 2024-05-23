@@ -7,17 +7,21 @@ import AddRecipe from "../components/Recipes/AddRecipe";
 import { RecipeContext } from "../contexts/RecipeContext";
 import RecipeService from "../services/recipes.service";
 
+// This is the main screen that will be displaying today's recipe and options to add a recipe or create a new menu
 const Homescreen = () => {
   const { recipes, setRecipes } = useContext(RecipeContext);
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [recipeVisible, setRecipeVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false); // State to control the visibility of the menu modal
+  const [recipeVisible, setRecipeVisible] = useState(false); // State to control the visibility of the add recipe modal
 
+  // Functions to show and hide the menu modal
   const showMenuModal = () => setMenuVisible(true);
   const hideMenuModal = () => setMenuVisible(false);
 
+  // Functions to show and hide the add recipe modal
   const showRecipeModal = () => setRecipeVisible(true);
   const hideRecipeModal = () => setRecipeVisible(false);
 
+  // Style for the modals
   const containerStyle = {
     backgroundColor: "white",
     padding: 30,
@@ -25,6 +29,7 @@ const Homescreen = () => {
     borderRadius: 10,
   };
 
+  // useEffect that will retrieve the recipes from the API when the component mounts
   React.useEffect(() => {
     async function retrieveRecipes() {
       try {
@@ -44,6 +49,7 @@ const Homescreen = () => {
         <TodayRecipe />
         <View>
           <Portal>
+            {/* Modal for adding a recipe */}
             <Modal
               visible={recipeVisible}
               onDismiss={hideRecipeModal}
@@ -52,16 +58,19 @@ const Homescreen = () => {
               <AddRecipe onClose={hideRecipeModal} />
             </Modal>
           </Portal>
+
           <Pressable style={styles.buttonRecipe} onPress={showRecipeModal}>
             <Text style={styles.buttonText}>Añadir receta</Text>
           </Pressable>
         </View>
+
         {recipes.length < 7 && (
           <Text style={styles.infoText}>
             Añade al menos 7 recetas para crear un menú nuevo.
           </Text>
         )}
         <Portal>
+          {/* Modal for creating a new menu */}
           <Modal
             visible={menuVisible}
             onDismiss={hideMenuModal}
@@ -70,6 +79,7 @@ const Homescreen = () => {
             <NewMenu onCloseModal={hideMenuModal} />
           </Modal>
         </Portal>
+        {/* Button to create a new menu, disabled if there are less than 7 recipes */}
         <Pressable
           style={[
             styles.newMenuButton,

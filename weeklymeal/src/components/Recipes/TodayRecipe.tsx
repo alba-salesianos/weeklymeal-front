@@ -21,12 +21,12 @@ const TodayRecipe = () => {
 
   const determineTodayRecipe = () => {
     //return currentDate;
-    currentMenu.map((menuItem: MenuItem) => {
+    /* currentMenu.map((menuItem: MenuItem) => {
       if (menuItem.day === currentDate) {
         console.log("Entras aquí?");
         return setTodaysRecipe(menuItem.recipe);
       }
-    });
+    }); */
   };
 
   React.useEffect(() => {

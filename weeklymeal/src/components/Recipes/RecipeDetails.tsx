@@ -12,6 +12,9 @@ interface RecipeDetailsProps {
   onDelete: () => void;
 }
 
+// Card with the details of the selected recipe. It will show every attribute as well as a button for editing and another one
+// for deleting the recipe.
+
 const RecipeDetails: React.FC<RecipeDetailsProps> = ({
   visible,
   onDismiss,

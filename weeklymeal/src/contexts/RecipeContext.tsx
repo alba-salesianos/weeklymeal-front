@@ -8,7 +8,7 @@ export type RecipeTypeContext = {
   setRecipe: Function;
   recipes: Recipe[];
   setRecipes: Function;
-  currentMenu: MenuItem[];
+  currentMenu: Recipe[];
   setCurrentMenu: Function;
 };
 

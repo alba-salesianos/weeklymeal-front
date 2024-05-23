@@ -6,7 +6,7 @@ import ButtonGroup from "../components/Authentification/ButtonGroup";
 import Login from "../components/Authentification/Login";
 import Signup from "../components/Authentification/Signup";
 
-//This is the Stack that has all the screens for Authentification: the buttons with the "login" and "signup", and the
+//Stack that has all the screens for Authentification: the buttons with the "login" and "signup", and the
 //the two correspondent screens to those buttons.
 
 const AuthStack = () => {

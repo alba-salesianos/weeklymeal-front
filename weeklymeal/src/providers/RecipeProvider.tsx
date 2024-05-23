@@ -11,7 +11,7 @@ function RecipeProvider(props: RecipeProviderProps) {
   const { children } = props;
 
   let recipeDefault: Recipe = {
-    idRecipe: "",
+    id: undefined,
     name: "",
     description: "",
     label: "" as "hidratos" | "fibra" | "proteína" | "pescado",
@@ -21,8 +21,8 @@ function RecipeProvider(props: RecipeProviderProps) {
 
   const [recipe, setRecipe] = React.useState(recipeDefault);
   const [todaysRecipe, setTodaysRecipe] = React.useState(recipeDefault);
-  const [recipes, setRecipes] = React.useState<Recipe[]>(recipesData);
-  const [currentMenu, setCurrentMenu] = React.useState<MenuItem[]>([]);
+  const [recipes, setRecipes] = React.useState<Recipe[]>([]);
+  const [currentMenu, setCurrentMenu] = React.useState<Recipe[]>([]);
 
   const defaultValue: RecipeTypeContext = {
     recipe,
