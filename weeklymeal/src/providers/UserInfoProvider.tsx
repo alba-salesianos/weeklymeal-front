@@ -15,14 +15,15 @@ function UserInfoProvider(props: UserInfoProviderProps) {
   const [isLogged, setisLogged] = React.useState(false);
 
   let userDefault: UserInfo = {
-    name: "root",
-    email: "a@gmail.com",
-    password: "123",
+    id: 0,
+    username: "",
+    email: "",
+    password: "",
   };
 
   const [user, setUser] = React.useState(userDefault);
   const [userArray, setUserArray] = React.useState([]);
-  const [currentUser, setCurrentUser] = React.useState("");
+  const [currentUser, setCurrentUser] = React.useState(userDefault);
 
   const defaultValue: UserInfoTypeContext = {
     isLogged,

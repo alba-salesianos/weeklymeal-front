@@ -3,15 +3,30 @@ import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { DataStackParamList } from "../../navigation/UserDataStack";
 import { UserInfoContext } from "../../contexts/UserInfoContext";
+import UserService from "../../services/user.service";
+import { reset } from "../../navigation/NavigationContainer";
 
 type Props = StackScreenProps<DataStackParamList, "AdminDataButtonGroup">;
 
 const AdminDataButtonGroup: React.FC<Props> = (props) => {
-  const { user } = React.useContext(UserInfoContext);
+  const { user, setCurrentUser, setisLogged } =
+    React.useContext(UserInfoContext);
+
+  const handleLogout = async () => {
+    try {
+      await UserService.logout();
+      setCurrentUser(null);
+      setisLogged(false);
+      reset("AuthStack");
+      console.log("Cerrando sesión");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greetingText}>Hola, {user.name}</Text>
+      <Text style={styles.greetingText}>Hola, {user.username}</Text>
       <View style={styles.buttonGroup}>
         <Pressable
           style={styles.button}
@@ -33,7 +48,10 @@ const AdminDataButtonGroup: React.FC<Props> = (props) => {
           <Text style={styles.buttonText}>Administrar usuarios</Text>
         </Pressable>
 
-        <Pressable style={[styles.button, styles.logoutButton]}>
+        <Pressable
+          style={[styles.button, styles.logoutButton]}
+          onPress={handleLogout}
+        >
           <Text style={[styles.buttonText, styles.logoutButtonText]}>
             Cerrar sesión
           </Text>

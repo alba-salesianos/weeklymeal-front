@@ -82,9 +82,23 @@ const WeeklyMenu = () => {
     <Provider>
       <View style={styles.container}>
         {currentMenu.length === 0 ? (
-          <Pressable style={styles.newMenuButton} onPress={showNewMenuModal}>
-            <Text style={styles.buttonText}>Crear menú nuevo</Text>
-          </Pressable>
+          <>
+            {recipes.length < 7 && (
+              <Text style={styles.infoText}>
+                Añade al menos 7 recetas para crear un menú semanal.
+              </Text>
+            )}
+            <Pressable
+              style={[
+                styles.newMenuButton,
+                recipes.length < 7 && styles.disabledButton,
+              ]}
+              onPress={recipes.length >= 7 ? showNewMenuModal : null}
+              disabled={recipes.length < 7}
+            >
+              <Text style={styles.buttonText}>Crear menú nuevo</Text>
+            </Pressable>
+          </>
         ) : (
           <View style={styles.buttonGroup}>
             <Pressable style={styles.editMenu} onPress={toggleEditMode}>
@@ -230,5 +244,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     width: "90%",
     marginTop: 20,
+  },
+  disabledButton: {
+    backgroundColor: "gray",
+    borderColor: "darkgray",
+  },
+  infoText: {
+    marginTop: 10,
+    fontSize: 14,
+    color: "red",
   },
 });

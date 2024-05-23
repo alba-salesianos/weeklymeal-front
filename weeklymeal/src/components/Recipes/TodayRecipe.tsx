@@ -9,7 +9,7 @@ const TodayRecipe = () => {
   const { currentMenu } = React.useContext(RecipeContext);
 
   const [todaysRecipe, setTodaysRecipe] = useState<Recipe>({
-    idRecipe: "",
+    id: undefined,
     name: "",
     description: "",
     label: "proteína",
@@ -32,8 +32,6 @@ const TodayRecipe = () => {
   React.useEffect(() => {
     return () => {
       determineTodayRecipe();
-      console.log(currentDate);
-      console.log(todaysRecipe);
     };
   }, [todaysRecipe]);
 

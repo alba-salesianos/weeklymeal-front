@@ -2,9 +2,12 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { RootStackParamList } from "./AuthHomepage";
-import ButtonGroup from "./ButtonGroup";
-import Login from "./Login";
-import Signup from "./Signup";
+import ButtonGroup from "../components/Authentification/ButtonGroup";
+import Login from "../components/Authentification/Login";
+import Signup from "../components/Authentification/Signup";
+
+//This is the Stack that has all the screens for Authentification: the buttons with the "login" and "signup", and the
+//the two correspondent screens to those buttons.
 
 const AuthStack = () => {
   const Stack = createStackNavigator<RootStackParamList>();

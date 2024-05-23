@@ -3,21 +3,33 @@ import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { DataStackParamList } from "../../navigation/UserDataStack";
 import { UserInfoContext } from "../../contexts/UserInfoContext";
+import UserService from "../../services/user.service";
 
 type Props = StackScreenProps<DataStackParamList, "DataButtonGroup">;
 
 const DataButtonGroup: React.FC<Props> = (props) => {
-  const { user } = React.useContext(UserInfoContext);
+  const { currentUser, setCurrentUser, setisLogged } =
+    React.useContext(UserInfoContext);
+
+  const handleLogout = async () => {
+    try {
+      await UserService.logout();
+      setCurrentUser(null);
+      setisLogged(false);
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greetingText}>Hola, {user.name}</Text>
+      <Text style={styles.greetingText}>Hola, {currentUser.username}</Text>
       <View style={styles.buttonGroup}>
         <Pressable
           style={styles.button}
           onPress={() => props.navigation.push("ChangeUser")}
         >
-          <Text style={styles.buttonText}>Cambiar usuario</Text>
+          <Text style={styles.buttonText}>Cambiar nombre usuario</Text>
         </Pressable>
         <Pressable
           style={styles.button}
@@ -26,7 +38,10 @@ const DataButtonGroup: React.FC<Props> = (props) => {
           <Text style={styles.buttonText}>Cambiar contraseña</Text>
         </Pressable>
 
-        <Pressable style={[styles.button, styles.logoutButton]}>
+        <Pressable
+          style={[styles.button, styles.logoutButton]}
+          onPress={handleLogout}
+        >
           <Text style={[styles.buttonText, styles.logoutButtonText]}>
             Cerrar sesión
           </Text>

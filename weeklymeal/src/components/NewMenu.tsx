@@ -3,6 +3,7 @@ import { View, Button, Text, StyleSheet } from "react-native";
 import { TextInput, RadioButton } from "react-native-paper";
 import { RecipeContext } from "../contexts/RecipeContext";
 import { Preferences, Recipe } from "../types/RecipeType";
+import MenuService from "../services/menu.service";
 
 const defaultPreferences: Preferences = {
   hidratos: 3,
@@ -30,22 +31,13 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
     }));
   };
 
-  const generateMenu = () => {
-    const daysOfWeek = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
+  const generateMenu = async () => {
     let selectedRecipes: Recipe[] = [];
     let lastUsedLabels: string[] = [];
 
-    recipes.sort(() => 0.5 - Math.random()); // Randomize the order of recipes
+    recipes.sort(() => 0.5 - Math.random());
 
-    daysOfWeek.forEach((day) => {
+    while (selectedRecipes.length < 7) {
       const availableRecipes = recipes.filter((recipe) => {
         const notUsedRecently = !lastUsedLabels.includes(recipe.label);
         const labelCount = selectedRecipes.filter(
@@ -54,16 +46,12 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
         return notUsedRecently && labelCount < (preferences[recipe.label] || 0);
       });
 
-      //TODO: si el usuario pone un número desorbitado, que salga un mensajito en plan "oye, esto son más de 7 días"
-
       if (availableRecipes.length > 0) {
         const recipe = availableRecipes[0];
         selectedRecipes.push(recipe);
-        // Update lastUsedLabels to remember the last two labels used
         lastUsedLabels.push(recipe.label);
         if (lastUsedLabels.length > 2) lastUsedLabels.shift();
       } else {
-        // If there are not enough recipes to meet the preferences, use a fallback recipe
         const fallbackRecipes = recipes.filter(
           (recipe) => !selectedRecipes.includes(recipe)
         );
@@ -76,18 +64,18 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
           if (lastUsedLabels.length > 2) lastUsedLabels.shift();
         }
       }
-    });
+    }
 
-    const weeklyMenuItems = daysOfWeek.map((day, index) => ({
-      day,
-      recipe: selectedRecipes[index % selectedRecipes.length],
-    }));
-
-    setCurrentMenu(weeklyMenuItems);
-    onCloseModal();
+    try {
+      //TODO: preguntar esto a jeremy porque claramente lo estoy haciendo mal
+      await MenuService.createMenu(selectedRecipes);
+      setCurrentMenu(selectedRecipes);
+      onCloseModal();
+    } catch (error) {
+      console.error("Error creating menu:", error);
+    }
   };
 
-  //TODO: corregir lo de que no se puede poner el número
   return (
     <View style={styles.container}>
       <RadioButton.Group
@@ -109,7 +97,6 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
             keyboardType="numeric"
             style={styles.input}
           />
-
           <TextInput
             label="Fibra"
             value={preferences.fibra.toString()}

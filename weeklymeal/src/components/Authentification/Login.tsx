@@ -2,49 +2,54 @@ import { Pressable, StyleSheet, Text, View, TextInput } from "react-native";
 import React from "react";
 import { UserInfoContext } from "../../contexts/UserInfoContext";
 import type { StackScreenProps } from "@react-navigation/stack";
-import userService from "../../services/recipes.service";
 import Container, { Toast } from "toastify-react-native";
-import { RootStackParamList } from "./AuthHomepage";
+import { RootStackParamList } from "../../navigation/AuthHomepage";
+import UserService from "../../services/user.service";
+import { LoginPetition } from "../../types/UserInfo";
 
 type Props = StackScreenProps<RootStackParamList, "Login">;
 
 const Login: React.FC<Props> = (props) => {
-  const { setUser, setisLogged, setCurrentUser } =
+  const { currentUser, setisLogged, setCurrentUser } =
     React.useContext(UserInfoContext);
 
-  const loginUsers = async (): Promise<boolean> => {
-    let response = true;
-    try {
-      const loggedUser = await userService.fetchUser(formData, "login");
-      loggedUser != null ? setUser(loggedUser) : (response = false);
-    } catch (error) {
-      console.error("Error during registration:", error);
-      response = false;
-    }
-    return response;
-  };
-
   const [formData, setFormData] = React.useState({
-    name: "",
+    userName: "",
     password: "",
   });
 
-  const handleInputChange = async (field: string, value: string) => {
+  // Function that handles the input from the keyboard from the user, updating the formData useState at any time
+  const handleInputChange = async (
+    field: keyof LoginPetition,
+    value: string
+  ) => {
     setFormData({
       ...formData,
       [field]: value,
     });
   };
 
+  // Function that handles the login with the information in formData. It will send a HTTP petition to the API, and if
+  // it's successfull it will set the currentUser and it will navigate to BottomTabNav, otherwise it will show
+  // an error message to the user.
   const handleLogin = async () => {
-    if (formData.name == "" || formData.password == "") {
+    if (formData.userName === "" || formData.password === "") {
       Toast.warn("Capón, rellena los 2 campos.", "top");
     } else {
-      (await loginUsers())
-        ? (setCurrentUser(formData.name),
-          setisLogged(true),
-          props.navigation.push("BottomTabNav"))
-        : Toast.error("Usuario o contraseña incorrecta.", "top");
+      try {
+        const loggedUser = await UserService.login(formData);
+        if (loggedUser) {
+          setCurrentUser(loggedUser);
+          setisLogged(true);
+
+          props.navigation.push("BottomTabNav");
+        } else {
+          Toast.error("Usuario o contraseña incorrecta.", "top");
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+        Toast.error("Error during login.", "top");
+      }
     }
   };
 
@@ -55,8 +60,8 @@ const Login: React.FC<Props> = (props) => {
         <TextInput
           style={styles.input}
           placeholder="Usuario"
-          onChangeText={(value) => handleInputChange("name", value)}
-          value={formData.name}
+          onChangeText={(value) => handleInputChange("userName", value)}
+          value={formData.userName}
         />
         <TextInput
           style={styles.input}

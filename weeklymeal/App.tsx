@@ -5,13 +5,13 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import Header from "./src/header/Header";
 import RecipeProvider from "./src/providers/RecipeProvider";
-import AuthHomepage from "./src/components/Authentification/AuthHomepage";
-import { NavigationContainer } from "@react-navigation/native";
+import AuthHomepage from "./src/navigation/AuthHomepage";
 import UserInfoProvider from "./src/providers/UserInfoProvider";
+import AppNavigationContainer from "./src/navigation/NavigationContainer";
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <AppNavigationContainer>
       <RecipeProvider>
         <UserInfoProvider>
           <PaperProvider>
@@ -20,7 +20,7 @@ export default function App() {
           </PaperProvider>
         </UserInfoProvider>
       </RecipeProvider>
-    </NavigationContainer>
+    </AppNavigationContainer>
   );
 }
 

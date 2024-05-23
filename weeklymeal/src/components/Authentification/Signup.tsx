@@ -2,30 +2,15 @@ import { Pressable, StyleSheet, Text, View, TextInput } from "react-native";
 import React from "react";
 import { UserInfoContext } from "../../contexts/UserInfoContext";
 import type { StackScreenProps } from "@react-navigation/stack";
-
-import userService from "../../services/recipes.service";
 import Container, { Toast } from "toastify-react-native";
-import { RootStackParamList } from "./AuthHomepage";
+import { RootStackParamList } from "../../navigation/AuthHomepage";
+import UserService from "../../services/user.service";
 
 type Props = StackScreenProps<RootStackParamList, "Signup">;
 
 const Signup: React.FC<Props> = (props) => {
-  const { setUser } = React.useContext(UserInfoContext);
-
-  const registerUsers = async (): Promise<boolean> => {
-    let response = true;
-    try {
-      const registeredUser = await userService.fetchUser(formData, "register");
-      registeredUser != null ? setUser(registeredUser) : (response = false);
-    } catch (error) {
-      console.error("Error during registration:", error);
-      response = false;
-    }
-    return response;
-  };
-
   const [formData, setFormData] = React.useState({
-    name: "",
+    userName: "",
     email: "",
     password: "",
   });
@@ -37,17 +22,28 @@ const Signup: React.FC<Props> = (props) => {
     });
   };
 
+  // Function that handles the creation of a new user with the information submited by the user in formData.
+  // It will send a HTTP petition to the API, and if it's successfull it will go back for the user to log-in, as it
+  // isn't automatic. If at any point the user inputs something wrong, the app will show an error message to the user.
   const handleSignup = async () => {
     if (
-      formData.name == "" ||
-      formData.password == "" ||
-      formData.email == ""
+      formData.userName === "" ||
+      formData.password === "" ||
+      formData.email === ""
     ) {
       Toast.warn("Capón, rellena los 3 campos.", "top");
     } else {
-      (await registerUsers())
-        ? props.navigation.goBack()
-        : Toast.error("Alguno de estos datos ya existe.", "top");
+      try {
+        const registeredUser = await UserService.register(formData);
+        if (registeredUser) {
+          props.navigation.goBack();
+        } else {
+          Toast.error("Alguno de estos datos ya existe.", "top");
+        }
+      } catch (error) {
+        console.error("Error during registration:", error);
+        Toast.error("Error durante el registro.", "top");
+      }
     }
   };
 
@@ -58,8 +54,8 @@ const Signup: React.FC<Props> = (props) => {
         <TextInput
           style={styles.input}
           placeholder="Usuario"
-          onChangeText={(value) => handleInputChange("name", value)}
-          value={formData.name}
+          onChangeText={(value) => handleInputChange("userName", value)}
+          value={formData.userName}
         />
         <TextInput
           style={styles.input}

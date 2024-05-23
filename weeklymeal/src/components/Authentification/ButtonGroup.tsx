@@ -1,8 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import type { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "./AuthHomepage";
+import { RootStackParamList } from "../../navigation/AuthHomepage";
 
 type Props = StackScreenProps<RootStackParamList, "ButtonGroup">;
+
+// These buttons are the ones that appear in the Authentification screen.
 
 const ButtonGroup: React.FC<Props> = (props) => {
   return (

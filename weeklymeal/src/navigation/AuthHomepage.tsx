@@ -1,8 +1,9 @@
-import { StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import AuthStack from "./AuthStack";
-import BottomTabNav from "../../navigation/BottomTabNav";
+import BottomTabNav from "./BottomTabNav";
+
+import { UserInfoContext } from "../contexts/UserInfoContext";
 
 export type RootStackParamList = {
   BottomTabNav: undefined;
@@ -14,10 +15,14 @@ export type RootStackParamList = {
 
 const Stack = createStackNavigator<RootStackParamList>();
 
+//This is the Stack that is the heart of the Application. It's the Stack that will appear when the user opens the app, and it will
+//take them either to the Autentification section, or the actual App if they log-in.
 const AuthHomepage = () => {
+  const { isLogged } = useContext(UserInfoContext);
+
   return (
     <Stack.Navigator
-      initialRouteName="BottomTabNav"
+      initialRouteName={isLogged ? "BottomTabNav" : "AuthStack"}
       screenOptions={{
         headerShown: false,
       }}
@@ -29,5 +34,3 @@ const AuthHomepage = () => {
 };
 
 export default AuthHomepage;
-
-const styles = StyleSheet.create({});

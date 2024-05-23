@@ -1,5 +1,11 @@
 export type UserInfo = {
-  name: string;
-  email?: string;
+  id: number;
+  username: string;
+  email: string;
+  password: string;
+};
+
+export type LoginPetition = {
+  userName: string;
   password: string;
 };
