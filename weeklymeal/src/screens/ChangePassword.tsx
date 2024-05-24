@@ -9,10 +9,13 @@ import Container, { Toast } from "toastify-react-native";
 type Props = StackScreenProps<DataStackParamList, "ChangePassword">;
 
 const ChangePassword: React.FC<Props> = (props) => {
+  //State that stores input value
   const { currentUser, setCurrentUser } = useContext(UserInfoContext);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  //Function that will take the data from the TextInputs and sends them to the API. It will only do it if both fields are
+  //the same, otherwise it will warn the user.
   const handleChangePassword = async () => {
     if (newPassword == "" || confirmPassword == "") {
       Toast.error("Rellena los campos", "top");
@@ -31,7 +34,7 @@ const ChangePassword: React.FC<Props> = (props) => {
         console.error("Error changing password:", error);
       }
     } else {
-      Toast.error("Las contraseñas no coinciden.", "top");
+      Toast.warn("Las contraseñas no coinciden.", "top");
     }
   };
   return (

@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
 import { Recipe, Menu } from "../types/RecipeType";
 import { Modal, Portal, Provider, Searchbar } from "react-native-paper";
@@ -9,10 +9,8 @@ import { navigate } from "../navigation/NavigationContainer";
 const WeeklyMenu = () => {
   const { currentMenu, recipes, setCurrentMenu, menuCreated, setMenuCreated } =
     useContext(RecipeContext);
-  const [refresh, setRefresh] = useState(false);
 
   // States that manage the visibility for the modals, the edit mode, the selected recipe, and the search text
-
   const [editMode, setEditMode] = useState<boolean>(false);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [searchVisible, setSearchVisible] = useState<boolean>(false);
@@ -77,6 +75,7 @@ const WeeklyMenu = () => {
     "Sunday",
   ];
 
+  //Sorts the recipes of the currentMenu by day, starting from Monday to Sunday.
   const sortRecipesByDayOfWeek = (recipes: Recipe[]) => {
     return recipes.sort((a, b) => {
       return (
@@ -90,6 +89,7 @@ const WeeklyMenu = () => {
     ? sortRecipesByDayOfWeek(currentMenu.recipes)
     : [];
 
+  //Function that navigates to the RecipeDetailsScreen
   const handleDetails = (recipe: Recipe) => {
     navigate("RecipeDetailsScreen", { recipe });
   };

@@ -9,6 +9,7 @@ import AddUserModal from "../components/Cards/AddUserModal";
 import { Modal, PaperProvider, Portal } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 
+//From this component the Admins can add users, edit the users' username and password or delete users.
 const ManageUsers = () => {
   const { users, setUsers } = useContext(UserInfoContext);
   const [editUserId, setEditUserId] = useState<number | null>(null);
@@ -29,8 +30,8 @@ const ManageUsers = () => {
   }, []);
 
   useEffect(() => {
+    // If the edited user is not on the list, closes the modal and cleans the list
     if (editUserId !== null && !users.some((user) => user.id === editUserId)) {
-      // Si el usuario editado ya no existe en la lista, cierra el modal y limpia el estado
       setEditUserId(null);
       setEditModalVisible(false);
     }

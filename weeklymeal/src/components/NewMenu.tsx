@@ -23,14 +23,17 @@ interface NewMenuProps {
 const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
   const { recipes, setCurrentMenu, setMenuCreated } = useContext(RecipeContext);
   const { currentUser } = useContext(UserInfoContext);
-  const [loading, setLoading] = useState<boolean>(false); //
 
+  //State that store preferences and loading state
+  const [loading, setLoading] = useState<boolean>(false); //
   const [menuType, setMenuType] = useState<"predefined" | "custom">(
     "predefined"
   );
   const [preferences, setPreferences] =
     useState<Preferences>(defaultPreferences);
 
+  //Function that will take user input to update preferences on how many times each type of food must be used in the
+  //generator
   const updatePreference = (key: keyof Preferences, value: string) => {
     setPreferences((prev) => ({
       ...prev,
@@ -38,6 +41,7 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
     }));
   };
 
+  //Function that sends to the database the recipes with each assiged day on the menu
   const updateRecipeDay = async (recipe: Recipe) => {
     try {
       await RecipeService.updateRecipe(recipe);
@@ -48,6 +52,7 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
 
   const generateMenu = async () => {
     setLoading(true);
+
     let selectedRecipes: Recipe[] = [];
     let lastUsedLabels: string[] = [];
     let usedRecipes: Set<number> = new Set();
@@ -60,7 +65,7 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
       // Filter recipes based on user preferences, recent usage, and avoiding duplicates.
       const availableRecipes = recipes.filter((recipe) => {
         const notUsedRecently = !lastUsedLabels.includes(recipe.label);
-        const notUsedInMenu = !usedRecipes.has(recipe.id!); // recipe.id! asegura que no sea undefined
+        const notUsedInMenu = !usedRecipes.has(recipe.id!); //
         const labelCount = selectedRecipes.filter(
           (r) => r.label === recipe.label
         ).length;
@@ -94,20 +99,21 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
       }
     }
 
-    // Asignar días de la semana a las recetas seleccionadas comenzando desde el día actual
-    const startIndex = moment().day(); // Obtener el día de la semana actual
+    // Assign days of the week to the recipes starting from today
+    const startIndex = moment().day();
     const daysOfWeek = [
       "Sunday",
       "Monday",
       "Tuesday",
       "Wednesday",
-      "Thursday",
+      "Thusday",
       "Friday",
       "Saturday",
     ];
+
     for (let i = 0; i < selectedRecipes.length; i++) {
       selectedRecipes[i].weekDay = daysOfWeek[(startIndex + i) % 7];
-      await updateRecipeDay(selectedRecipes[i]); // Actualizar la receta en el backend
+      await updateRecipeDay(selectedRecipes[i]); // Updates the recipe in the database
     }
 
     const recipeRequest: MenuPetition = {

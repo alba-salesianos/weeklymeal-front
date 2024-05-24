@@ -10,12 +10,15 @@ interface AddUserModalProps {
   onDismiss: () => void;
 }
 
+// Only for Admins
 const AddUserModal: React.FC<AddUserModalProps> = ({ onDismiss }) => {
+  //States to store input values
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUsers } = useContext(UserInfoContext);
 
+  //Function that will take the data from the two TextInputs and send them to the API to create a new user.
   const handleAddUser = async () => {
     try {
       const newUser = {
@@ -25,7 +28,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ onDismiss }) => {
       };
       const createdUser = await UserService.register(newUser);
       setUsers((prevUsers: UserInfo[]) => [...prevUsers, createdUser]);
-      Toast.success("Usuario añadido con éxito.", "top");
       onDismiss();
     } catch (error) {
       Toast.error("Error al añadir el usuario. Inténtalo de nuevo.", "top");

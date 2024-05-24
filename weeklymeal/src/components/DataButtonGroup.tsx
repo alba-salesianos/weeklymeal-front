@@ -8,9 +8,12 @@ import { reset } from "../navigation/NavigationContainer";
 
 type Props = StackScreenProps<DataStackParamList, "DataButtonGroup">;
 
+// Buttons that will navigate towards the different screens to manage user information. The ManageUsers button will only
+// be visible for Admins.
 const DataButtonGroup: React.FC<Props> = (props) => {
   const { currentUser, setisLogged } = React.useContext(UserInfoContext);
 
+  //Function to log-out and go towards the Authentification Screen
   const handleLogout = async () => {
     try {
       await UserService.logout();

@@ -79,8 +79,8 @@ const Homescreen = () => {
   return (
     <PaperProvider>
       <View style={styles.container}>
+        {/* Today's Recipe*/}
         <TodayRecipe key={currentUser.id} />
-
         <View>
           <Portal>
             {/* Modal for adding a recipe */}
@@ -92,7 +92,6 @@ const Homescreen = () => {
               <AddRecipe onClose={hideRecipeModal} />
             </Modal>
           </Portal>
-
           <Pressable style={styles.buttonRecipe} onPress={showRecipeModal}>
             <Text style={styles.buttonText}>Añadir receta</Text>
           </Pressable>

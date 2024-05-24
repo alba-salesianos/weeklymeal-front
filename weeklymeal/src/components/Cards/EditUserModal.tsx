@@ -11,11 +11,17 @@ interface EditUserModalProps {
   user: UserInfo;
 }
 
+// Only for Admins
 const EditUserModal: React.FC<EditUserModalProps> = ({ user }) => {
+  const { setUsers } = useContext(UserInfoContext);
+  
+  // States that store input value
   const [newUsername, setNewUsername] = useState(user.userName);
   const [newPassword, setNewPassword] = useState("");
-  const { setUsers } = useContext(UserInfoContext);
+  
 
+  //Function that takes the information from the TextInput and send them to the API to update the username and password
+  //of a user.
   const handleUpdateUser = async () => {
     try {
       const userUpdate = {
@@ -29,7 +35,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user }) => {
           u.id === user.id ? { ...u, userName: newUsername } : u
         )
       );
-      Toast.success("Usuario actualizado con éxito.", "top");
     } catch (error) {
       Toast.error("Error al actualizar el usuario. Inténtalo de nuevo.", "top");
       console.error("Error updating user:", error);

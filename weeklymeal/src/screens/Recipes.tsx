@@ -24,12 +24,10 @@ const Recipes = () => {
   const hideAddModal = () => setAddRecipeVisible(false);
 
   // Functions to show and hide the "RecipeDetails" modal
-
   const showDetailsScreen = (recipe: Recipe) => {
     navigate("RecipeDetailsScreen", { recipe });
   };
 
-  // Style for the modals
   const containerStyle = { backgroundColor: "white", margin: 40 };
 
   // Function that filters the recipes based on the input text

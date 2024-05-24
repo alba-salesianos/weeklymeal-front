@@ -9,6 +9,7 @@ interface UserCardProps {
   onDelete: (id: number) => void;
 }
 
+// Card with the information of the users that will appear on the ManageUsers screen.
 const UserCard: React.FC<UserCardProps> = ({ name, id, onEdit, onDelete }) => {
   const handleEdit = () => {
     onEdit(id);

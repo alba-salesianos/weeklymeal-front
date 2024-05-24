@@ -8,12 +8,15 @@ import UserService from "../../services/user.service";
 type Props = StackScreenProps<RootStackParamList, "Signup">;
 
 const Signup: React.FC<Props> = (props) => {
+
+  //State that stores input values
   const [formData, setFormData] = React.useState({
     userName: "",
     email: "",
     password: "",
   });
 
+  //Function that handles user input
   const handleInputChange = async (field: string, value: string) => {
     setFormData({
       ...formData,

@@ -10,9 +10,11 @@ import UserService from "../services/user.service";
 type Props = StackScreenProps<DataStackParamList, "ChangeUser">;
 
 const ChangeUser: React.FC<Props> = (props) => {
+  //States to store input value
   const { currentUser, setCurrentUser } = useContext(UserInfoContext);
   const [newUsername, setNewUsername] = useState("");
 
+  //Function that will take the data from the TextInput and send it to the API. If it's left blank, it will warn the user.
   const handleChangeUsername = async () => {
     if (newUsername === "") {
       Toast.error("Introduzca nombre de usuario.", "top");

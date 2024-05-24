@@ -5,22 +5,28 @@ import { RecipeContext } from "../../contexts/RecipeContext";
 import { Recipe } from "../../types/RecipeType";
 import { navigate } from "../../navigation/NavigationContainer";
 
+
 const TodayRecipe = () => {
   const { currentMenu } = useContext(RecipeContext);
   const [todaysRecipe, setTodaysRecipe] = useState<Recipe | null>(null);
-  const currentDate = moment().format("dddd");
 
+
+  const currentDate = moment().format("dddd"); //Current day
+
+  //Load the current menu and compare the weekDay attribute to the currentDay. When it finds it, sets it on the todayRecipe state.
   useEffect(() => {
-    console.log("Current Menu:", currentMenu); // Log currentMenu to check its value
+    console.log("Current Menu:", currentMenu); 
     if (currentMenu && currentMenu.recipes && currentMenu.recipes.length > 0) {
       const todayRecipe = currentMenu.recipes.find(
         (recipe) => recipe.weekDay === currentDate
       );
-      console.log("Today's Recipe:", todayRecipe); // Log today's recipe to check its value
+      console.log("Today's Recipe:", todayRecipe); 
       setTodaysRecipe(todayRecipe || null);
     }
   }, [currentMenu, currentDate]);
 
+
+  //Function that navigates towards the screen that shows the details of today's recipe
   const handlePress = () => {
     if (todaysRecipe) {
       navigate("RecipeDetailsScreen", { recipe: todaysRecipe });

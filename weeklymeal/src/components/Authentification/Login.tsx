@@ -12,6 +12,7 @@ type Props = StackScreenProps<RootStackParamList, "Login">;
 const Login: React.FC<Props> = (props) => {
   const { setisLogged, setCurrentUser } = React.useContext(UserInfoContext);
 
+  //State that stores input values
   const [formData, setFormData] = React.useState({
     userName: "",
     password: "",

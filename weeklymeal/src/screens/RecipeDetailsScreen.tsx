@@ -24,6 +24,8 @@ type RecipeDetailsScreenRouteProp = RouteProp<
   "RecipeDetails"
 >;
 
+//Screen with the logic for navigating to this screen from other parts of the application, and also handles the logic of editing,
+//deleting recipes, and calling for the RecipeDetails component.
 const RecipeDetailsScreen: React.FC = () => {
   const navigation = useNavigation<RecipeDetailsScreenNavigationProp>();
   const route = useRoute<RecipeDetailsScreenRouteProp>();
@@ -49,8 +51,6 @@ const RecipeDetailsScreen: React.FC = () => {
         currentUser.id
       );
       setRecipes(retrievedRecipes);
-
-      
       hideEditModal();
       navigation.goBack();
     } catch (error) {
