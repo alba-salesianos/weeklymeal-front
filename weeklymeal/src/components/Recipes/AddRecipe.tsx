@@ -1,20 +1,22 @@
 import { StyleSheet, TextInput, View, Text, Pressable } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Menu } from "react-native-paper";
-import { RecipeContext } from "../../contexts/RecipeContext";
+
 import { Recipe } from "../../types/RecipeType";
-import RecipeService from "../../services/recipes.service";
-import { UserInfoContext } from "../../contexts/UserInfoContext";
 
 interface AddRecipeProps {
   initialRecipe?: Recipe | null;
   onClose: () => void;
+  onSave?: (recipe: Recipe) => void;
+  onEdit?: (recipe: Recipe) => void;
 }
 
-const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
-  const { setRecipes } = useContext(RecipeContext);
-  const { currentUser } = useContext(UserInfoContext);
-
+const AddRecipe: React.FC<AddRecipeProps> = ({
+  initialRecipe,
+  onClose,
+  onSave,
+  onEdit,
+}) => {
   const isEditing = Boolean(initialRecipe);
 
   const [recipe, setRecipe] = React.useState<Recipe>({
@@ -33,26 +35,17 @@ const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
     }
   }, [initialRecipe]);
 
-  // Function that handles saving a recipe. It checks if the recipe is being edited or created,
-  // makes the appropriate API call, updates the state, and closes the modal.
-  const handleSaveRecipe = async () => {
-    try {
-      if (isEditing) {
-        const updatedRecipe = await RecipeService.updateRecipe(recipe);
-        setRecipes((prevState: Recipe[]) =>
-          prevState.map((r) => (r.id === recipe.id ? updatedRecipe : r))
-        );
-      } else {
-        const newRecipe = await RecipeService.createRecipe(
-          recipe,
-          currentUser.id
-        );
-        setRecipes((prevState: Recipe[]) => [...prevState, newRecipe]);
-      }
-      onClose();
-    } catch (error) {
-      console.error("Error saving recipe:", error);
+  const handleSave = async () => {
+    console.log("Datos de la receta antes de guardar:", recipe);
+
+    if (isEditing && onEdit) {
+      console.log("Editando receta:", recipe);
+      onEdit(recipe);
+    } else if (!isEditing && onSave) {
+      console.log("Añadiendo nueva receta:", recipe);
+      onSave(recipe);
     }
+    onClose();
   };
 
   const [typeMenuVisible, setTypeMenuVisible] = React.useState(false);
@@ -136,7 +129,7 @@ const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
         }
       />
 
-      <Pressable style={styles.button} onPress={handleSaveRecipe}>
+      <Pressable style={styles.button} onPress={handleSave}>
         <Text>{isEditing ? "Guardar" : "Añadir"}</Text>
       </Pressable>
     </View>

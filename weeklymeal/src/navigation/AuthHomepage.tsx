@@ -4,6 +4,9 @@ import AuthStack from "./AuthStack";
 import BottomTabNav from "./BottomTabNav";
 
 import { UserInfoContext } from "../contexts/UserInfoContext";
+import RecipeDetails from "../components/Recipes/RecipeDetails";
+import { Recipe } from "../types/RecipeType";
+import RecipeDetailsScreen from "../screens/RecipeDetailsScreen";
 
 export type RootStackParamList = {
   BottomTabNav: undefined;
@@ -11,6 +14,7 @@ export type RootStackParamList = {
   ButtonGroup: undefined;
   Login: undefined;
   Signup: undefined;
+  RecipeDetailsScreen: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -29,6 +33,10 @@ const AuthHomepage = () => {
     >
       <Stack.Screen name="BottomTabNav" component={BottomTabNav} />
       <Stack.Screen name="AuthStack" component={AuthStack} />
+      <Stack.Screen
+        name="RecipeDetailsScreen"
+        component={RecipeDetailsScreen}
+      />
     </Stack.Navigator>
   );
 };

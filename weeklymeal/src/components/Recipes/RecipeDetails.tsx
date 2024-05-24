@@ -5,8 +5,6 @@ import { Recipe } from "../../types/RecipeType";
 import { Ionicons } from "@expo/vector-icons";
 
 interface RecipeDetailsProps {
-  visible: boolean;
-  onDismiss: () => void;
   recipe: Recipe | null;
   onEdit: () => void;
   onDelete: () => void;
@@ -16,41 +14,31 @@ interface RecipeDetailsProps {
 // for deleting the recipe.
 
 const RecipeDetails: React.FC<RecipeDetailsProps> = ({
-  visible,
-  onDismiss,
   recipe,
   onEdit,
   onDelete,
 }) => {
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onDismiss}
-        contentContainerStyle={styles.container}
-      >
-        <View style={styles.detailsContainer}>
-          <Text style={styles.modalTitle}>{recipe?.name}</Text>
-          <Text style={styles.modalDescription}>{recipe?.description}</Text>
-          <Text style={styles.modalSectionTitle}>Ingredientes</Text>
-          <Text style={styles.modalText}>{recipe?.ingredients}</Text>
-          <Text style={styles.modalSectionTitle}>Tipo</Text>
-          <Text style={styles.modalText}>{recipe?.label}</Text>
-          <Text style={styles.modalSectionTitle}>Pasos</Text>
-          <Text style={styles.modalText}>{recipe?.steps}</Text>
-          <View style={styles.buttonContainer}>
-            <Pressable style={styles.button} onPress={onEdit}>
-              <Ionicons name="pencil" size={24} color="black" />
-              <Text style={styles.buttonText}>Editar</Text>
-            </Pressable>
-            <Pressable style={styles.buttonDelete} onPress={onDelete}>
-              <Ionicons name="trash" size={24} color="black" />
-              <Text style={styles.buttonText}>Eliminar</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-    </Portal>
+    <View style={styles.detailsContainer}>
+      <Text style={styles.modalTitle}>{recipe?.name}</Text>
+      <Text style={styles.modalDescription}>{recipe?.description}</Text>
+      <Text style={styles.modalSectionTitle}>Ingredientes</Text>
+      <Text style={styles.modalText}>{recipe?.ingredients}</Text>
+      <Text style={styles.modalSectionTitle}>Tipo</Text>
+      <Text style={styles.modalText}>{recipe?.label}</Text>
+      <Text style={styles.modalSectionTitle}>Pasos</Text>
+      <Text style={styles.modalText}>{recipe?.steps}</Text>
+      <View style={styles.buttonContainer}>
+        <Pressable style={styles.button} onPress={onEdit}>
+          <Ionicons name="pencil" size={24} color="black" />
+          <Text style={styles.buttonText}>Editar</Text>
+        </Pressable>
+        <Pressable style={styles.buttonDelete} onPress={onDelete}>
+          <Ionicons name="trash" size={24} color="black" />
+          <Text style={styles.buttonText}>Eliminar</Text>
+        </Pressable>
+      </View>
+    </View>
   );
 };
 
@@ -68,6 +56,7 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     alignItems: "center",
+    marginTop: 50,
   },
   modalTitle: {
     fontSize: 24,

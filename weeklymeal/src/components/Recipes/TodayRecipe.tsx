@@ -1,8 +1,9 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import moment from "moment";
 import { RecipeContext } from "../../contexts/RecipeContext";
 import { Recipe } from "../../types/RecipeType";
+import { navigate } from "../../navigation/NavigationContainer";
 
 const TodayRecipe = () => {
   const { currentMenu } = useContext(RecipeContext);
@@ -18,16 +19,24 @@ const TodayRecipe = () => {
     }
   }, [currentMenu, currentDate]);
 
+  const handlePress = () => {
+    if (todaysRecipe) {
+      navigate("RecipeDetailsScreen", { recipe: todaysRecipe });
+    }
+  };
+
   return (
     <View style={styles.card}>
       {todaysRecipe ? (
         <>
-          <Text style={styles.title}>Receta de Hoy</Text>
-          <Text style={styles.recipeName}>{todaysRecipe.name}</Text>
-          <Text style={styles.recipeDescription}>
-            {todaysRecipe.description}
-          </Text>
-          <Text style={styles.recipeLabel}>{todaysRecipe.label}</Text>
+          <Pressable onPress={handlePress}>
+            <Text style={styles.title}>Receta de Hoy</Text>
+            <Text style={styles.recipeName}>{todaysRecipe.name}</Text>
+            <Text style={styles.recipeDescription}>
+              {todaysRecipe.description}
+            </Text>
+            <Text style={styles.recipeLabel}>{todaysRecipe.label}</Text>
+          </Pressable>
         </>
       ) : (
         <Text style={styles.noMenuText}>No se ha generado menú</Text>

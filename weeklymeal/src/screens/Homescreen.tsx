@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Modal, PaperProvider, Portal } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
 import TodayRecipe from "../components/Recipes/TodayRecipe";
@@ -33,7 +33,7 @@ const Homescreen = () => {
   };
 
   // useEffect that will retrieve the recipes from the API when the component mounts
-  React.useEffect(() => {
+  useEffect(() => {
     async function retrieveRecipes() {
       try {
         const data = await RecipeService.getAllRecipes(currentUser.id);

@@ -5,16 +5,17 @@ import { Modal, PaperProvider, Portal, Searchbar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import AddRecipe from "../components/Recipes/AddRecipe";
 import { Recipe } from "../types/RecipeType";
-import RecipeDetails from "../components/Recipes/RecipeDetails";
+import { navigate } from "../navigation/NavigationContainer";
 import RecipeService from "../services/recipes.service";
-
+import { UserInfoContext } from "../contexts/UserInfoContext";
 
 const Recipes = () => {
   const { recipes, setRecipes } = useContext(RecipeContext);
+  const { currentUser } = useContext(UserInfoContext);
 
   // States that manage the selected recipe, the text to search and the visibility of the modals
   const [addRecipeVisible, setAddRecipeVisible] = useState(false);
-  const [detailsVisible, setDetailsVisible] = useState(false);
+
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [searchText, setSearchText] = useState("");
 
@@ -23,37 +24,10 @@ const Recipes = () => {
   const hideAddModal = () => setAddRecipeVisible(false);
 
   // Functions to show and hide the "RecipeDetails" modal
-  const showDetailsModal = (recipe: Recipe) => {
+
+  const showDetailsScreen = (recipe: Recipe) => {
     console.log("Selected Recipe:", recipe);
-    setSelectedRecipe(recipe);
-    setDetailsVisible(true);
-  };
-  const hideDetailsModal = () => {
-    setSelectedRecipe(null);
-    setDetailsVisible(false);
-  };
-
-  // Function that will open the "AddRecipe" to be used when editing a recipe
-  const handleEditRecipe = () => {
-    setAddRecipeVisible(true);
-    setDetailsVisible(false);
-  };
-
-  // Function to handle deleting a recipe
-  const handleDeleteRecipe = async () => {
-    if (selectedRecipe && selectedRecipe.id !== undefined) {
-      try {
-        await RecipeService.deleteRecipe(selectedRecipe.id);
-        setRecipes((prevState: Recipe[]) =>
-          prevState.filter(
-            (recipeToDelete) => recipeToDelete.id !== selectedRecipe.id
-          )
-        );
-        hideDetailsModal();
-      } catch (error) {
-        console.error("Error deleting recipe:", error);
-      }
-    }
+    navigate("RecipeDetailsScreen", { recipe });
   };
 
   // Style for the modals
@@ -64,6 +38,19 @@ const Recipes = () => {
     return recipes.filter((recipe) =>
       recipe.name.toLowerCase().includes(searchText.toLowerCase())
     );
+  };
+
+  const handleSaveRecipe = async (newRecipe: Recipe) => {
+    try {
+      const createdRecipe = await RecipeService.createRecipe(
+        newRecipe,
+        currentUser.id
+      );
+      setRecipes((prevState: Recipe[]) => [...prevState, createdRecipe]);
+      hideAddModal();
+    } catch (error) {
+      console.error("Error saving recipe:", error);
+    }
   };
 
   const filteredRecipes = searchRecipe();
@@ -78,7 +65,11 @@ const Recipes = () => {
             onDismiss={hideAddModal}
             contentContainerStyle={containerStyle}
           >
-            <AddRecipe initialRecipe={selectedRecipe} onClose={hideAddModal} />
+            <AddRecipe
+              initialRecipe={selectedRecipe}
+              onClose={hideAddModal}
+              onSave={handleSaveRecipe}
+            />
           </Modal>
         </Portal>
 
@@ -107,7 +98,7 @@ const Recipes = () => {
               <View key={index} style={styles.card}>
                 <Text style={styles.title}>{recipe.name}</Text>
                 <Text style={styles.description}>{recipe.description}</Text>
-                <Pressable onPress={() => showDetailsModal(recipe)}>
+                <Pressable onPress={() => showDetailsScreen(recipe)}>
                   <Text style={styles.detailsLink}>Ver detalles</Text>
                 </Pressable>
               </View>
@@ -115,13 +106,6 @@ const Recipes = () => {
         </ScrollView>
 
         {/* Modal for recipe details with options to edit or delete */}
-        <RecipeDetails
-          visible={detailsVisible}
-          onDismiss={hideDetailsModal}
-          recipe={selectedRecipe}
-          onEdit={handleEditRecipe}
-          onDelete={handleDeleteRecipe}
-        />
       </View>
     </PaperProvider>
   );
