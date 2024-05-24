@@ -44,7 +44,7 @@ const Recipes = () => {
         currentUser.id
       );
       setRecipes(retrievedRecipes);
-      hideAddModal();
+     
     } catch (error) {
       console.error("Error saving recipe:", error);
     }

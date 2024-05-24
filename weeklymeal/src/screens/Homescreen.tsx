@@ -8,7 +8,7 @@ import { RecipeContext } from "../contexts/RecipeContext";
 import RecipeService from "../services/recipes.service";
 import MenuService from "../services/menu.service";
 import { UserInfoContext } from "../contexts/UserInfoContext";
-import { Menu } from "../types/RecipeType";
+import { Menu, Recipe } from "../types/RecipeType";
 
 const Homescreen = () => {
   const { recipes, setRecipes, setCurrentMenu, menuCreated, setMenuCreated } =
@@ -76,6 +76,17 @@ const Homescreen = () => {
     }
   }, [menuCreated, setMenuCreated, currentUser.id]);
 
+  const handleSaveRecipe = async (newRecipe: Recipe) => {
+    try {
+      await RecipeService.createRecipe(newRecipe, currentUser.id);
+      const retrievedRecipes = await RecipeService.getAllRecipes(
+        currentUser.id
+      );
+      setRecipes(retrievedRecipes);
+    } catch (error) {
+      console.error("Error saving recipe:", error);
+    }
+  };
   return (
     <PaperProvider>
       <View style={styles.container}>
@@ -89,7 +100,7 @@ const Homescreen = () => {
               onDismiss={hideRecipeModal}
               contentContainerStyle={containerStyle}
             >
-              <AddRecipe onClose={hideRecipeModal} />
+              <AddRecipe onClose={hideRecipeModal} onSave={handleSaveRecipe} />
             </Modal>
           </Portal>
           <Pressable style={styles.buttonRecipe} onPress={showRecipeModal}>
