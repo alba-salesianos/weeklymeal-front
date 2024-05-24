@@ -1,8 +1,9 @@
 export type UserInfo = {
   id: number;
-  username: string;
+  userName: string;
   email: string;
-  password: string;
+  password?: string;
+  role?: string;
 };
 
 export type LoginPetition = {

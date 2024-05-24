@@ -16,13 +16,14 @@ function UserInfoProvider(props: UserInfoProviderProps) {
 
   let userDefault: UserInfo = {
     id: 0,
-    username: "",
+    userName: "",
     email: "",
     password: "",
+    role: "",
   };
 
   const [user, setUser] = React.useState(userDefault);
-  const [userArray, setUserArray] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState(userDefault);
 
   const defaultValue: UserInfoTypeContext = {
@@ -32,8 +33,8 @@ function UserInfoProvider(props: UserInfoProviderProps) {
     setUser,
     currentUser,
     setCurrentUser,
-    userArray,
-    setUserArray,
+    users,
+    setUsers,
   };
 
   return (

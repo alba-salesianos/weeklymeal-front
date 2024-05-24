@@ -1,24 +1,36 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import UserCard from "../components/Cards/UserCard";
-
-interface User {
-  id: string;
-  name: string;
-}
-
-const DATA: User[] = [
-  { id: "1", name: "Sakuma Daisuke" },
-  { id: "2", name: "Fukazawa Tatsuya" },
-  { id: "3", name: "Mukai Koji" },
-];
+import { UserInfoContext } from "../contexts/UserInfoContext";
+import UserService from "../services/user.service";
 
 const ManageUsers = () => {
+  const { users, setUsers } = useContext(UserInfoContext);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersData = await UserService.getAllUsers();
+        setUsers(usersData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
     <View>
       <ScrollView>
-        {DATA && DATA.map((user) => <UserCard name={user.name} id={user.id} />)}
+        {users.length > 0 ? (
+          users.map((user) => (
+            <UserCard key={user.id} name={user.userName} id={user.id} />
+          ))
+        ) : (
+          <Text>No users found</Text>
+        )}
       </ScrollView>
     </View>
   );

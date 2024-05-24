@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, Text, View, TextInput } from "react-native";
 import React from "react";
-import { UserInfoContext } from "../../contexts/UserInfoContext";
 import type { StackScreenProps } from "@react-navigation/stack";
 import Container, { Toast } from "toastify-react-native";
 import { RootStackParamList } from "../../navigation/AuthHomepage";
@@ -84,36 +83,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#fce8e6",
   },
   buttonGroup: {
     height: 200,
     justifyContent: "space-around",
   },
   input: {
-    borderRadius: 5,
+    borderRadius: 10,
     height: 45,
     margin: 12,
+    borderWidth: 1,
     padding: 12,
     backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "grey",
+    borderColor: "gray",
   },
   button: {
     marginTop: 12,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 10,
-    backgroundColor: "royalblue",
+    paddingVertical: 15,
+    paddingHorizontal: 60,
+    borderRadius: 15,
+    backgroundColor: "#dbeed0",
+    borderColor: "gray",
+    borderWidth: 1,
   },
   buttonText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: "black",
   },
 });

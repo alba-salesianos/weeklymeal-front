@@ -9,7 +9,7 @@ import { reset } from "../../navigation/NavigationContainer";
 type Props = StackScreenProps<DataStackParamList, "AdminDataButtonGroup">;
 
 const AdminDataButtonGroup: React.FC<Props> = (props) => {
-  const { user, setCurrentUser, setisLogged } =
+  const { currentUser, setCurrentUser, setisLogged } =
     React.useContext(UserInfoContext);
 
   const handleLogout = async () => {
@@ -26,7 +26,10 @@ const AdminDataButtonGroup: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greetingText}>Hola, {user.username}</Text>
+      {currentUser && (
+        <Text style={styles.greetingText}>Hola, {currentUser.userName}</Text>
+      )}
+
       <View style={styles.buttonGroup}>
         <Pressable
           style={styles.button}

@@ -1,19 +1,15 @@
 import { createContext } from "react";
+import { UserInfo } from "../types/UserInfo";
 
 export type UserInfoTypeContext = {
   isLogged: boolean;
   setisLogged: Function;
-  user: { id: number; username: string; email?: string; password: string };
+  user: UserInfo;
   setUser: Function;
-  currentUser: {
-    id: number;
-    username: string;
-    email?: string;
-    password: string;
-  };
+  currentUser: UserInfo;
   setCurrentUser: Function;
-  userArray: { name: string; email?: string; password: string }[];
-  setUserArray: Function;
+  users: UserInfo[];
+  setUsers: Function;
 };
 
 export const UserInfoContext = createContext({} as UserInfoTypeContext);

@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useState } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
-import { Recipe } from "../types/RecipeType";
+import { Recipe, Menu } from "../types/RecipeType";
 import { Modal, Portal, Provider, Searchbar } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
 
@@ -16,8 +16,14 @@ const WeeklyMenu = () => {
   const [newMenuVisible, setNewMenuVisible] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
 
-  // Function to show the recipe details or search modal
-  const showModal = (recipe: Recipe) => {
+  // Function to show the recipe details modal
+  const showDetailsModal = (recipe: Recipe) => {
+    setSelectedRecipe(recipe);
+    setVisible(true);
+  };
+
+  // Function to show the search modal for selecting a new recipe
+  const showSearchModal = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
     setSearchVisible(true);
   };
@@ -39,12 +45,13 @@ const WeeklyMenu = () => {
   // Function that handles when the user changes a recipe in the menu, looping through CurrentMenu and only changing the recipe
   // that is selected at that time when pressing on it.
   const handleRecipeChange = (newRecipe: Recipe) => {
-    if (selectedRecipe) {
-      setCurrentMenu((prevMenu: Recipe[]) =>
-        prevMenu.map((recipe) =>
+    if (selectedRecipe && currentMenu) {
+      setCurrentMenu((prevMenu: Menu) => ({
+        ...prevMenu,
+        recipes: prevMenu.recipes.map((recipe) =>
           recipe.id === selectedRecipe.id ? newRecipe : recipe
-        )
-      );
+        ),
+      }));
       hideSearchModal();
     }
   };
@@ -66,14 +73,14 @@ const WeeklyMenu = () => {
   return (
     <Provider>
       <View style={styles.container}>
-        {currentMenu.length === 0 ? (
+        {currentMenu && currentMenu.recipes.length === 0 ? (
           <>
             {recipes.length < 7 && (
               <Text style={styles.infoText}>
                 Añade al menos 7 recetas para crear un menú semanal.
               </Text>
             )}
-           {/* Button to create a new menu, disabled if there are less than 7 recipes */}
+            {/* Button to create a new menu, disabled if there are less than 7 recipes */}
             <Pressable
               style={[
                 styles.newMenuButton,
@@ -87,7 +94,6 @@ const WeeklyMenu = () => {
           </>
         ) : (
           <View style={styles.buttonGroup}>
-         
             <Pressable style={styles.editMenu} onPress={toggleEditMode}>
               <Text style={styles.buttonText}>
                 {editMode ? "Dejar de editar" : "Editar menú"}
@@ -101,15 +107,21 @@ const WeeklyMenu = () => {
             </Pressable>
           </View>
         )}
-        {currentMenu.length > 0 && (
+        {currentMenu && currentMenu.recipes.length > 0 && (
           <ScrollView>
-         
-            {currentMenu.map((recipe, index) => (
-              <Pressable key={index} onPress={() => showModal(recipe)}>
+            {currentMenu.recipes.map((recipe, index) => (
+              <Pressable
+                key={index}
+                onPress={() =>
+                  editMode ? showSearchModal(recipe) : showDetailsModal(recipe)
+                }
+              >
                 <View style={styles.card}>
                   <Text style={{ fontWeight: "bold", fontSize: 17 }}>
                     {recipe.name}
                   </Text>
+
+                  <Text>{recipe.label}</Text>
                 </View>
               </Pressable>
             ))}
@@ -129,6 +141,8 @@ const WeeklyMenu = () => {
             <View>
               <Text>{selectedRecipe.name}</Text>
               <Text>{selectedRecipe.description}</Text>
+              <Text>{selectedRecipe.ingredients}</Text>
+              <Text>{selectedRecipe.steps}</Text>
             </View>
           )}
         </Modal>

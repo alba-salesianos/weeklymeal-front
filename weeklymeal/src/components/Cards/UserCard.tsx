@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 interface UserCardProps {
   name: string;
-  id: string;
+  id: number;
 }
 
 const UserCard: React.FC<UserCardProps> = ({ name, id }) => {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
-    color: "#333",
+    color: "#black",
   },
   buttons: {
     flexDirection: "row",

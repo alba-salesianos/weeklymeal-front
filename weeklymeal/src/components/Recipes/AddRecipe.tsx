@@ -1,9 +1,10 @@
 import { StyleSheet, TextInput, View, Text, Pressable } from "react-native";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Menu } from "react-native-paper";
 import { RecipeContext } from "../../contexts/RecipeContext";
 import { Recipe } from "../../types/RecipeType";
 import RecipeService from "../../services/recipes.service";
+import { UserInfoContext } from "../../contexts/UserInfoContext";
 
 interface AddRecipeProps {
   initialRecipe?: Recipe | null;
@@ -11,7 +12,8 @@ interface AddRecipeProps {
 }
 
 const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
-  const { setRecipes } = React.useContext(RecipeContext);
+  const { setRecipes } = useContext(RecipeContext);
+  const { currentUser } = useContext(UserInfoContext);
 
   const isEditing = Boolean(initialRecipe);
 
@@ -41,7 +43,10 @@ const AddRecipe: React.FC<AddRecipeProps> = ({ initialRecipe, onClose }) => {
           prevState.map((r) => (r.id === recipe.id ? updatedRecipe : r))
         );
       } else {
-        const newRecipe = await RecipeService.createRecipe(recipe);
+        const newRecipe = await RecipeService.createRecipe(
+          recipe,
+          currentUser.id
+        );
         setRecipes((prevState: Recipe[]) => [...prevState, newRecipe]);
       }
       onClose();

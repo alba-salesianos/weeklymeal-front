@@ -23,7 +23,7 @@ const DataButtonGroup: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greetingText}>Hola, {currentUser.username}</Text>
+      <Text style={styles.greetingText}>Hola, {currentUser.userName}</Text>
       <View style={styles.buttonGroup}>
         <Pressable
           style={styles.button}

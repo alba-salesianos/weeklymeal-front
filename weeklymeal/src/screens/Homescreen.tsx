@@ -6,10 +6,13 @@ import TodayRecipe from "../components/Recipes/TodayRecipe";
 import AddRecipe from "../components/Recipes/AddRecipe";
 import { RecipeContext } from "../contexts/RecipeContext";
 import RecipeService from "../services/recipes.service";
+import MenuService from "../services/menu.service";
+import { UserInfoContext } from "../contexts/UserInfoContext";
 
 // This is the main screen that will be displaying today's recipe and options to add a recipe or create a new menu
 const Homescreen = () => {
-  const { recipes, setRecipes } = useContext(RecipeContext);
+  const { recipes, setRecipes, setCurrentMenu } = useContext(RecipeContext);
+  const { currentUser } = useContext(UserInfoContext);
   const [menuVisible, setMenuVisible] = useState(false); // State to control the visibility of the menu modal
   const [recipeVisible, setRecipeVisible] = useState(false); // State to control the visibility of the add recipe modal
 
@@ -33,8 +36,12 @@ const Homescreen = () => {
   React.useEffect(() => {
     async function retrieveRecipes() {
       try {
-        const data = await RecipeService.getAllRecipes();
+        const data = await RecipeService.getAllRecipes(currentUser.id);
         setRecipes(data);
+
+        const menuData = await MenuService.getLastMenu(currentUser.id);
+        setCurrentMenu(menuData);
+
         console.log("recetas obtenidas correctamente");
       } catch (error) {
         console.log(error);

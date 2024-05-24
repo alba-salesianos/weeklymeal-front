@@ -34,15 +34,17 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({
           <Text style={styles.modalDescription}>{recipe?.description}</Text>
           <Text style={styles.modalSectionTitle}>Ingredientes</Text>
           <Text style={styles.modalText}>{recipe?.ingredients}</Text>
+          <Text style={styles.modalSectionTitle}>Tipo</Text>
+          <Text style={styles.modalText}>{recipe?.label}</Text>
           <Text style={styles.modalSectionTitle}>Pasos</Text>
           <Text style={styles.modalText}>{recipe?.steps}</Text>
           <View style={styles.buttonContainer}>
             <Pressable style={styles.button} onPress={onEdit}>
-              <Ionicons name="pencil" size={24} color="white" />
+              <Ionicons name="pencil" size={24} color="black" />
               <Text style={styles.buttonText}>Editar</Text>
             </Pressable>
-            <Pressable style={styles.button} onPress={onDelete}>
-              <Ionicons name="trash" size={24} color="white" />
+            <Pressable style={styles.buttonDelete} onPress={onDelete}>
+              <Ionicons name="trash" size={24} color="black" />
               <Text style={styles.buttonText}>Eliminar</Text>
             </Pressable>
           </View>
@@ -103,11 +105,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    backgroundColor: "#007bff",
+    backgroundColor: "#dbeed0",
+  },
+  buttonDelete: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    backgroundColor: "#f28966",
   },
   buttonText: {
     marginLeft: 5,
-    color: "white",
+    color: "black",
     fontWeight: "bold",
   },
 });

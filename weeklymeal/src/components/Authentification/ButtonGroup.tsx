@@ -31,7 +31,6 @@ export default ButtonGroup;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fce8e6",
     flex: 1,
     justifyContent: "center",
   },
@@ -43,16 +42,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 80,
-    borderRadius: 10,
-    backgroundColor: "royalblue",
+    paddingVertical: 15,
+    paddingHorizontal: 60,
+    borderRadius: 15,
+    backgroundColor: "#dbeed0",
+    borderColor: "gray",
+    borderWidth: 1,
   },
   buttonText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: "black",
   },
 });

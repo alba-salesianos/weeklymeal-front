@@ -1,15 +1,15 @@
 import axios from "axios";
 import { Recipe } from "../types/RecipeType";
 
-const API_URL = "http://192.168.137.1:8082/api/v1";
+const API_URL = "http://192.168.1.101:8082/api/v1";
 
-const getAllRecipes = async () => {
-  const response = await axios(`${API_URL}/recipes/2`);
+const getAllRecipes = async (idUser: number) => {
+  const response = await axios(`${API_URL}/recipes/${idUser}`);
   return response.data;
 };
 
-const createRecipe = async (recipe: Recipe) => {
-  const response = await axios.post(`${API_URL}/recipe/2`, recipe);
+const createRecipe = async (recipe: Recipe, idUser: number) => {
+  const response = await axios.post(`${API_URL}/recipe/${idUser}`, recipe);
   return response.data;
 };
 

@@ -5,6 +5,7 @@ export type Recipe = {
   label: "hidratos" | "fibra" | "proteína" | "pescado";
   ingredients: string;
   steps: string;
+  dayOfWeek?: string;
 };
 
 export type Preferences = {
@@ -14,7 +15,12 @@ export type Preferences = {
   pescado: number;
 };
 
-export type MenuItem = {
-  day: string;
-  recipe: Recipe;
+export type MenuPetition = {
+  recipeDtoList: Recipe[];
+};
+
+export type Menu = {
+  id: number;
+  created: string;
+  recipes: Recipe[];
 };

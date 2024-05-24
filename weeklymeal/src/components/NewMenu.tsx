@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
-import { View, Button, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable, Text } from "react-native";
 import { TextInput, RadioButton } from "react-native-paper";
 import { RecipeContext } from "../contexts/RecipeContext";
-import { Preferences, Recipe } from "../types/RecipeType";
+import { Menu, MenuPetition, Preferences, Recipe } from "../types/RecipeType";
 import MenuService from "../services/menu.service";
+import { UserInfoContext } from "../contexts/UserInfoContext";
+import moment from "moment";
 
 // Default preferences for the predefined menu, that will be used if the user picks the default option when generating
 // a new menu.
@@ -20,6 +22,7 @@ interface NewMenuProps {
 
 const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
   const { recipes, setCurrentMenu } = useContext(RecipeContext);
+  const { currentUser } = useContext(UserInfoContext);
 
   // State to keep track of the selected menu type ("preterminado" or "personalizado").
   const [menuType, setMenuType] = useState<"predefined" | "custom">(
@@ -57,10 +60,9 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
         const labelCount = selectedRecipes.filter(
           (r) => r.label === recipe.label
         ).length; // Count how many times the label has been used in the selected recipes.
-        return notUsedRecently && labelCount < (preferences[recipe.label] || 0); 
-        // Ensures a recipe is fit to be included in the menu if the label has not been used in the previous recipe, 
+        return notUsedRecently && labelCount < (preferences[recipe.label] || 0);
+        // Ensures a recipe is fit to be included in the menu if the label has not been used in the previous recipe,
         // and also judging by the preferences.
-        
       });
 
       if (availableRecipes.length > 0) {
@@ -85,19 +87,45 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
       }
     }
 
+    const recipeRequest: MenuPetition = {
+      recipeDtoList: selectedRecipes,
+    };
+
     try {
       // Send the generated menu to the backend service.
-      await MenuService.createMenu(selectedRecipes);
-      setCurrentMenu(selectedRecipes); 
-      onCloseModal(); 
+      console.log(recipeRequest);
+      await MenuService.createMenu(recipeRequest, currentUser.id);
+
+      // Obtener el último menú guardado
+      const lastMenu: Menu = await MenuService.getLastMenu(currentUser.id);
+
+      // Asignar días de la semana a las recetas seleccionadas comenzando desde el día actual
+      const startIndex = moment().day(); // Obtener el día de la semana actual
+      const daysOfWeek = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      const recipesWithDays = lastMenu.recipes.map((recipe, index) => ({
+        ...recipe,
+        dayOfWeek: daysOfWeek[(startIndex + index) % 7],
+      }));
+
+      lastMenu.recipes = recipesWithDays;
+
+      setCurrentMenu(lastMenu);
+      onCloseModal();
     } catch (error) {
-      console.error("Error creating menu:", error); 
+      console.error("Error creating menu:", error);
     }
   };
 
   return (
     <View style={styles.container}>
-     
       <RadioButton.Group
         onValueChange={(newValue) =>
           setMenuType(newValue as "predefined" | "custom")
@@ -108,7 +136,6 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
         <RadioButton.Item label="Menú Personalizado" value="custom" />
       </RadioButton.Group>
 
-    
       {menuType === "custom" && (
         <View>
           <TextInput
@@ -142,8 +169,9 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
         </View>
       )}
 
- 
-      <Button title="Generar Menú" onPress={generateMenu} />
+      <Pressable style={styles.button} onPress={generateMenu}>
+        <Text style={styles.buttonText}>Generar Menú</Text>
+      </Pressable>
     </View>
   );
 };
@@ -151,9 +179,29 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    borderRadius: 10,
   },
   input: {
     marginBottom: 10,
+    backgroundColor: "white",
+  },
+  button: {
+    marginTop: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 10,
+    backgroundColor: "#f28966",
+    borderWidth: 1,
+    borderColor: "gray",
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "black",
   },
 });
 

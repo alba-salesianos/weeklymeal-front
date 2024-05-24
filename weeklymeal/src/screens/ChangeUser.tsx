@@ -4,23 +4,40 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { UserInfo } from "../types/UserInfo";
 import { DataStackParamList } from "../navigation/UserDataStack";
 import { UserInfoContext } from "../contexts/UserInfoContext";
+import Container, { Toast } from "toastify-react-native";
+import UserService from "../services/user.service";
 
 type Props = StackScreenProps<DataStackParamList, "ChangeUser">;
 
 const ChangeUser: React.FC<Props> = (props) => {
-  const { setUser } = useContext(UserInfoContext);
+  const { currentUser, setCurrentUser } = useContext(UserInfoContext);
   const [newUsername, setNewUsername] = useState("");
 
-  const handleChangeUsername = () => {
-    setUser((prevUser: UserInfo) => ({
-      ...prevUser,
-      name: newUsername,
-    }));
-    props.navigation.goBack();
+  const handleChangeUsername = async () => {
+    if (newUsername === "") {
+      Toast.error("Introduzca nombre de usuario.", "top");
+      return;
+    }
+
+    try {
+      const userUpdate = {
+        userName: newUsername,
+        email: currentUser.email,
+        password: currentUser.password!,
+      };
+      console.log("User Update:", userUpdate);
+      await UserService.updateUser(userUpdate, currentUser.id);
+      setCurrentUser({ ...currentUser, userName: newUsername });
+
+      props.navigation.goBack();
+    } catch (error) {
+      console.error("Error changing username:", error);
+    }
   };
 
   return (
     <View style={styles.container}>
+      <Container width={370} />
       <Text style={styles.greetingText}>Cambiar Nombre de Usuario</Text>
       <TextInput
         style={styles.input}
@@ -60,6 +77,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
     backgroundColor: "#fff",
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 20,
   },
   button: {
     alignItems: "center",

@@ -3,30 +3,38 @@ import React, { useState, useContext } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { DataStackParamList } from "../navigation/UserDataStack";
 import { UserInfoContext } from "../contexts/UserInfoContext";
+import UserService from "../services/user.service";
+import Container, { Toast } from "toastify-react-native";
 
 type Props = StackScreenProps<DataStackParamList, "ChangePassword">;
 
 const ChangePassword: React.FC<Props> = (props) => {
-  const { user, setUser } = useContext(UserInfoContext);
+  const { currentUser, setCurrentUser } = useContext(UserInfoContext);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     if (newPassword === confirmPassword) {
-      // Aquí deberías implementar la lógica para cambiar la contraseña en tu servidor
-      // setUser((prevUser) => ({
-      //   ...prevUser,
-      //   password: newPassword,
-      // }));
-      props.navigation.goBack();
+      try {
+        const userUpdate = {
+          userName: currentUser.userName,
+          email: currentUser.email,
+          password: newPassword,
+        };
+        console.log("User Update:", userUpdate);
+        await UserService.updateUser(userUpdate, currentUser.id);
+        setCurrentUser({ ...currentUser, password: newPassword });
+        props.navigation.goBack();
+      } catch (error) {
+        console.error("Error changing password:", error);
+      }
     } else {
-      setError("Las contraseñas no coinciden");
+      Toast.error("Las contraseñas no coinciden.", "top");
     }
   };
-
   return (
     <View style={styles.container}>
+      <Container width={370} />
       <Text style={styles.greetingText}>Cambiar Contraseña</Text>
       <TextInput
         style={styles.input}
@@ -42,7 +50,6 @@ const ChangePassword: React.FC<Props> = (props) => {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <Pressable style={styles.button} onPress={handleChangePassword}>
         <Text style={styles.buttonText}>Aceptar</Text>
       </Pressable>
