@@ -1,14 +1,18 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useState } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
-import { Recipe, Menu } from "../types/RecipeType";
+import { Recipe, Menu, MenuPetition } from "../types/RecipeType";
 import { Modal, Portal, Provider, Searchbar } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
 import { navigate } from "../navigation/NavigationContainer";
+import RecipeService from "../services/recipes.service";
+import MenuService from "../services/menu.service";
+import { UserInfoContext } from "../contexts/UserInfoContext";
 
 const WeeklyMenu = () => {
-  const { currentMenu, recipes, setCurrentMenu, menuCreated, setMenuCreated } =
+  const { currentMenu, recipes, setCurrentMenu, setMenuCreated } =
     useContext(RecipeContext);
+  const { currentUser } = useContext(UserInfoContext);
 
   // States that manage the visibility for the modals, the edit mode, the selected recipe, and the search text
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -16,6 +20,7 @@ const WeeklyMenu = () => {
   const [searchVisible, setSearchVisible] = useState<boolean>(false);
   const [newMenuVisible, setNewMenuVisible] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
+  const [modifiedMenu, setModifiedMenu] = useState<Menu | null>(null);
 
   // Function to show the search modal for selecting a new recipe
   const showSearchModal = (recipe: Recipe) => {
@@ -38,14 +43,30 @@ const WeeklyMenu = () => {
 
   // Function that handles when the user changes a recipe in the menu, looping through CurrentMenu and only changing the recipe
   // that is selected at that time when pressing on it.
-  const handleRecipeChange = (newRecipe: Recipe) => {
+  const handleRecipeChange = async (newRecipe: Recipe) => {
     if (selectedRecipe && currentMenu && currentMenu.recipes) {
-      setCurrentMenu((prevMenu: Menu) => ({
-        ...prevMenu,
-        recipes: prevMenu.recipes.map((recipe) =>
-          recipe.id === selectedRecipe.id ? newRecipe : recipe
-        ),
-      }));
+      newRecipe.weekDay = selectedRecipe.weekDay;
+      const updatedRecipes = currentMenu.recipes.map((recipe) =>
+        recipe.id === selectedRecipe.id ? newRecipe : recipe
+      );
+
+      const updatedMenu: Menu = { ...currentMenu, recipes: updatedRecipes };
+      setModifiedMenu(updatedMenu);
+
+      const recipeRequest: MenuPetition = {
+        recipeDtoList: updatedRecipes,
+      };
+
+      try {
+        await RecipeService.updateRecipe(newRecipe);
+        await MenuService.createMenu(recipeRequest, currentUser.id);
+        const lastMenu: Menu = await MenuService.getLastMenu(currentUser.id);
+        setCurrentMenu(lastMenu.recipes);
+        setMenuCreated(true);
+      } catch (error) {
+        console.error("Error creating menu:", error);
+      }
+
       hideSearchModal();
     }
   };
@@ -112,7 +133,7 @@ const WeeklyMenu = () => {
               onPress={recipes.length >= 7 ? showNewMenuModal : null}
               disabled={recipes.length < 7}
             >
-              <Text style={styles.buttonText}>Crear menú nuevo</Text>
+              <Text style={styles.buttonText}>Menú nuevo</Text>
             </Pressable>
           </>
         ) : (
@@ -126,7 +147,7 @@ const WeeklyMenu = () => {
             {/* Button to create a new menu; this one will never be disabled cause for this one to appear there has to be 
             a menu */}
             <Pressable style={styles.newMenuButton} onPress={showNewMenuModal}>
-              <Text style={styles.buttonText}>Crear menú nuevo</Text>
+              <Text style={styles.buttonText}>Menú nuevo</Text>
             </Pressable>
           </View>
         )}

@@ -106,7 +106,7 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
       "Monday",
       "Tuesday",
       "Wednesday",
-      "Thusday",
+      "Thursday",
       "Friday",
       "Saturday",
     ];
