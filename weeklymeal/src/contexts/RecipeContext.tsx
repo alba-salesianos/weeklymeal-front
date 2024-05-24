@@ -10,6 +10,8 @@ export type RecipeTypeContext = {
   setRecipes: Function;
   currentMenu: Menu;
   setCurrentMenu: Function;
+  menuCreated: boolean;
+  setMenuCreated: Function;
 };
 
 export const RecipeContext = createContext({} as RecipeTypeContext);

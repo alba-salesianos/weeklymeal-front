@@ -26,7 +26,6 @@ const Recipes = () => {
   // Functions to show and hide the "RecipeDetails" modal
 
   const showDetailsScreen = (recipe: Recipe) => {
-    console.log("Selected Recipe:", recipe);
     navigate("RecipeDetailsScreen", { recipe });
   };
 
@@ -42,11 +41,11 @@ const Recipes = () => {
 
   const handleSaveRecipe = async (newRecipe: Recipe) => {
     try {
-      const createdRecipe = await RecipeService.createRecipe(
-        newRecipe,
+      await RecipeService.createRecipe(newRecipe, currentUser.id);
+      const retrievedRecipes = await RecipeService.getAllRecipes(
         currentUser.id
       );
-      setRecipes((prevState: Recipe[]) => [...prevState, createdRecipe]);
+      setRecipes(retrievedRecipes);
       hideAddModal();
     } catch (error) {
       console.error("Error saving recipe:", error);

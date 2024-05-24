@@ -5,17 +5,17 @@ import { Ionicons } from "@expo/vector-icons";
 interface UserCardProps {
   name: string;
   id: number;
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ name, id }) => {
+const UserCard: React.FC<UserCardProps> = ({ name, id, onEdit, onDelete }) => {
   const handleEdit = () => {
-    // Lógica para editar el usuario
-    console.log("Editar usuario con id:", id);
+    onEdit(id);
   };
 
-  const handleDelete = () => {
-    // Lógica para eliminar el usuario
-    console.log("Eliminar usuario con id:", id);
+  const handleDelete = async () => {
+    onDelete(id);
   };
 
   return (
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
-    color: "#black",
+    color: "black",
   },
   buttons: {
     flexDirection: "row",

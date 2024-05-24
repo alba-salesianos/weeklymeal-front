@@ -30,8 +30,8 @@ const RecipeDetailsScreen: React.FC = () => {
 
   const { recipe } = route.params;
 
-  const {currentUser} = useContext(UserInfoContext)
-  const {setRecipes} = useContext(RecipeContext)
+  const { currentUser } = useContext(UserInfoContext);
+  const { setRecipes } = useContext(RecipeContext);
 
   const [editRecipeVisible, setEditRecipeVisible] = useState(false);
 
@@ -44,11 +44,13 @@ const RecipeDetailsScreen: React.FC = () => {
       selectedRecipe
     );
     try {
-      const updatedRecipe = await RecipeService.updateRecipe(selectedRecipe);
-      const retrievedRecipes = await RecipeService.getAllRecipes(currentUser.id)
-      setRecipes(retrievedRecipes)
+      await RecipeService.updateRecipe(selectedRecipe);
+      const retrievedRecipes = await RecipeService.getAllRecipes(
+        currentUser.id
+      );
+      setRecipes(retrievedRecipes);
+
       
-      console.log("Recipe updated:", updatedRecipe);
       hideEditModal();
       navigation.goBack();
     } catch (error) {
@@ -60,6 +62,10 @@ const RecipeDetailsScreen: React.FC = () => {
     if (recipe && recipe.id !== undefined) {
       try {
         await RecipeService.deleteRecipe(recipe.id);
+        const retrievedRecipes = await RecipeService.getAllRecipes(
+          currentUser.id
+        );
+        setRecipes(retrievedRecipes);
         console.log("Recipe deleted");
         navigation.goBack();
       } catch (error) {

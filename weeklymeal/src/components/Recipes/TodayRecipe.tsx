@@ -11,10 +11,12 @@ const TodayRecipe = () => {
   const currentDate = moment().format("dddd");
 
   useEffect(() => {
-    if (currentMenu && currentMenu.recipes.length > 0) {
+    console.log("Current Menu:", currentMenu); // Log currentMenu to check its value
+    if (currentMenu && currentMenu.recipes && currentMenu.recipes.length > 0) {
       const todayRecipe = currentMenu.recipes.find(
-        (recipe) => recipe.dayOfWeek === currentDate
+        (recipe) => recipe.weekDay === currentDate
       );
+      console.log("Today's Recipe:", todayRecipe); // Log today's recipe to check its value
       setTodaysRecipe(todayRecipe || null);
     }
   }, [currentMenu, currentDate]);

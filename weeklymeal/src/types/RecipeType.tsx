@@ -5,7 +5,7 @@ export type Recipe = {
   label: "hidratos" | "fibra" | "proteína" | "pescado";
   ingredients: string;
   steps: string;
-  dayOfWeek?: string;
+  weekDay: string;
 };
 
 export type Preferences = {

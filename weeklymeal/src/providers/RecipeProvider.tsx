@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { RecipeContext, RecipeTypeContext } from "../contexts/RecipeContext";
 import { Menu, Recipe } from "../types/RecipeType";
 
@@ -16,6 +16,7 @@ function RecipeProvider(props: RecipeProviderProps) {
     label: "" as "hidratos" | "fibra" | "proteína" | "pescado",
     ingredients: "",
     steps: "",
+    weekDay: "",
   };
 
   let menuDefault: Menu = {
@@ -24,10 +25,11 @@ function RecipeProvider(props: RecipeProviderProps) {
     recipes: [],
   };
 
-  const [recipe, setRecipe] = React.useState(recipeDefault);
-  const [todaysRecipe, setTodaysRecipe] = React.useState(recipeDefault);
-  const [recipes, setRecipes] = React.useState<Recipe[]>([]);
-  const [currentMenu, setCurrentMenu] = React.useState<Menu>(menuDefault);
+  const [recipe, setRecipe] = useState(recipeDefault);
+  const [todaysRecipe, setTodaysRecipe] = useState(recipeDefault);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [currentMenu, setCurrentMenu] = useState<Menu>(menuDefault);
+  const [menuCreated, setMenuCreated] = useState<boolean>(false);
 
   const defaultValue: RecipeTypeContext = {
     recipe,
@@ -38,6 +40,8 @@ function RecipeProvider(props: RecipeProviderProps) {
     setRecipes,
     currentMenu,
     setCurrentMenu,
+    menuCreated,
+    setMenuCreated,
   };
 
   return (

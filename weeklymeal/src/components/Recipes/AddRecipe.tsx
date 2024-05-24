@@ -26,6 +26,7 @@ const AddRecipe: React.FC<AddRecipeProps> = ({
     label: "" as "hidratos" | "fibra" | "proteína" | "pescado",
     ingredients: "",
     steps: "",
+    weekDay: "",
   });
 
   // If an initialRecipe is provided for its editing, it will set it in setRecipe

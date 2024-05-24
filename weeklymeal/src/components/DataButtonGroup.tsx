@@ -1,21 +1,19 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
-import { DataStackParamList } from "../../navigation/UserDataStack";
-import { UserInfoContext } from "../../contexts/UserInfoContext";
-import UserService from "../../services/user.service";
-import { reset } from "../../navigation/NavigationContainer";
+import { DataStackParamList } from "../navigation/UserDataStack";
+import { UserInfoContext } from "../contexts/UserInfoContext";
+import UserService from "../services/user.service";
+import { reset } from "../navigation/NavigationContainer";
 
-type Props = StackScreenProps<DataStackParamList, "AdminDataButtonGroup">;
+type Props = StackScreenProps<DataStackParamList, "DataButtonGroup">;
 
-const AdminDataButtonGroup: React.FC<Props> = (props) => {
-  const { currentUser, setCurrentUser, setisLogged } =
-    React.useContext(UserInfoContext);
+const DataButtonGroup: React.FC<Props> = (props) => {
+  const { currentUser, setisLogged } = React.useContext(UserInfoContext);
 
   const handleLogout = async () => {
     try {
       await UserService.logout();
-      setCurrentUser(null);
       setisLogged(false);
       reset("AuthStack");
       console.log("Cerrando sesión");
@@ -44,12 +42,14 @@ const AdminDataButtonGroup: React.FC<Props> = (props) => {
           <Text style={styles.buttonText}>Cambiar contraseña</Text>
         </Pressable>
 
-        <Pressable
-          style={styles.button}
-          onPress={() => props.navigation.push("ManageUsers")}
-        >
-          <Text style={styles.buttonText}>Administrar usuarios</Text>
-        </Pressable>
+        {currentUser?.role === "ADMIN" && (
+          <Pressable
+            style={styles.button}
+            onPress={() => props.navigation.push("ManageUsers")}
+          >
+            <Text style={styles.buttonText}>Administrar usuarios</Text>
+          </Pressable>
+        )}
 
         <Pressable
           style={[styles.button, styles.logoutButton]}
@@ -64,7 +64,7 @@ const AdminDataButtonGroup: React.FC<Props> = (props) => {
   );
 };
 
-export default AdminDataButtonGroup;
+export default DataButtonGroup;
 
 const styles = StyleSheet.create({
   container: {

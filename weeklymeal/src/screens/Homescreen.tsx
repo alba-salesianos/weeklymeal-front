@@ -4,14 +4,17 @@ import { Modal, PaperProvider, Portal } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
 import TodayRecipe from "../components/Recipes/TodayRecipe";
 import AddRecipe from "../components/Recipes/AddRecipe";
+
 import { RecipeContext } from "../contexts/RecipeContext";
 import RecipeService from "../services/recipes.service";
 import MenuService from "../services/menu.service";
 import { UserInfoContext } from "../contexts/UserInfoContext";
+import { Menu } from "../types/RecipeType";
+import WeeklyMenu from "./WeeklyMenu";
 
-// This is the main screen that will be displaying today's recipe and options to add a recipe or create a new menu
 const Homescreen = () => {
-  const { recipes, setRecipes, setCurrentMenu } = useContext(RecipeContext);
+  const { recipes, setRecipes, setCurrentMenu, menuCreated, setMenuCreated } =
+    useContext(RecipeContext);
   const { currentUser } = useContext(UserInfoContext);
   const [menuVisible, setMenuVisible] = useState(false); // State to control the visibility of the menu modal
   const [recipeVisible, setRecipeVisible] = useState(false); // State to control the visibility of the add recipe modal
@@ -36,24 +39,35 @@ const Homescreen = () => {
   useEffect(() => {
     async function retrieveRecipes() {
       try {
-        const data = await RecipeService.getAllRecipes(currentUser.id);
-        setRecipes(data);
+        if (currentUser) {
+          const data = await RecipeService.getAllRecipes(currentUser.id);
+          setRecipes(data);
 
-        const menuData = await MenuService.getLastMenu(currentUser.id);
-        setCurrentMenu(menuData);
+          const menuData: Menu = await MenuService.getLastMenu(currentUser.id);
 
-        console.log("recetas obtenidas correctamente");
+          setCurrentMenu(menuData);
+
+          console.log("recetas obtenidas correctamente");
+        }
       } catch (error) {
         console.log(error);
       }
     }
     retrieveRecipes();
-  }, []);
+  }, [setRecipes, setCurrentMenu, currentUser.id]);
+
+  // useEffect para re-renderizar los componentes cuando se crea un nuevo menú
+  useEffect(() => {
+    if (menuCreated) {
+      setMenuCreated(false); // Resetear el estado después de que se ha creado el menú
+    }
+  }, [menuCreated, setMenuCreated]);
 
   return (
     <PaperProvider>
       <View style={styles.container}>
         <TodayRecipe />
+
         <View>
           <Portal>
             {/* Modal for adding a recipe */}
@@ -71,11 +85,6 @@ const Homescreen = () => {
           </Pressable>
         </View>
 
-        {recipes.length < 7 && (
-          <Text style={styles.infoText}>
-            Añade al menos 7 recetas para crear un menú nuevo.
-          </Text>
-        )}
         <Portal>
           {/* Modal for creating a new menu */}
           <Modal
@@ -97,6 +106,11 @@ const Homescreen = () => {
         >
           <Text style={styles.buttonText}>Crear menú nuevo</Text>
         </Pressable>
+        {recipes.length < 7 && (
+          <Text style={styles.infoText}>
+            Añade al menos 7 recetas para crear un menú nuevo.
+          </Text>
+        )}
       </View>
     </PaperProvider>
   );

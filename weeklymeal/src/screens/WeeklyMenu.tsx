@@ -4,6 +4,8 @@ import { RecipeContext } from "../contexts/RecipeContext";
 import { Recipe, Menu } from "../types/RecipeType";
 import { Modal, Portal, Provider, Searchbar } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
+import RecipeDetailsScreen from "./RecipeDetailsScreen";
+import { navigate } from "../navigation/NavigationContainer";
 
 const WeeklyMenu = () => {
   const { currentMenu, recipes, setCurrentMenu } = useContext(RecipeContext);
@@ -45,7 +47,7 @@ const WeeklyMenu = () => {
   // Function that handles when the user changes a recipe in the menu, looping through CurrentMenu and only changing the recipe
   // that is selected at that time when pressing on it.
   const handleRecipeChange = (newRecipe: Recipe) => {
-    if (selectedRecipe && currentMenu) {
+    if (selectedRecipe && currentMenu && currentMenu.recipes) {
       setCurrentMenu((prevMenu: Menu) => ({
         ...prevMenu,
         recipes: prevMenu.recipes.map((recipe) =>
@@ -70,10 +72,40 @@ const WeeklyMenu = () => {
 
   const filteredRecipes = searchRecipe();
 
+  // Ordenar las recetas según los días de la semana
+  const daysOfWeekOrder = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  const sortRecipesByDayOfWeek = (recipes: Recipe[]) => {
+    return recipes.sort((a, b) => {
+      return (
+        daysOfWeekOrder.indexOf(a.weekDay!) -
+        daysOfWeekOrder.indexOf(b.weekDay!)
+      );
+    });
+  };
+
+  const sortedRecipes = currentMenu?.recipes
+    ? sortRecipesByDayOfWeek(currentMenu.recipes)
+    : [];
+
+  const handleDetails = (recipe: Recipe) => {
+    navigate("RecipeDetailsScreen", { recipe });
+  };
+
   return (
     <Provider>
       <View style={styles.container}>
-        {currentMenu && currentMenu.recipes.length === 0 ? (
+        {currentMenu &&
+        currentMenu.recipes &&
+        currentMenu.recipes.length === 0 ? (
           <>
             {recipes.length < 7 && (
               <Text style={styles.infoText}>
@@ -107,46 +139,29 @@ const WeeklyMenu = () => {
             </Pressable>
           </View>
         )}
-        {currentMenu && currentMenu.recipes.length > 0 && (
-          <ScrollView>
-            {currentMenu.recipes.map((recipe, index) => (
-              <Pressable
-                key={index}
-                onPress={() =>
-                  editMode ? showSearchModal(recipe) : showDetailsModal(recipe)
-                }
-              >
-                <View style={styles.card}>
-                  <Text style={{ fontWeight: "bold", fontSize: 17 }}>
-                    {recipe.name}
-                  </Text>
-
-                  <Text>{recipe.label}</Text>
-                </View>
-              </Pressable>
-            ))}
-          </ScrollView>
-        )}
-      </View>
-
-      {/* Modal to show recipe details */}
-      <Portal>
-        <Modal
-          visible={visible}
-          onDismiss={hideModal}
-          contentContainerStyle={containerStyle}
-          style={{ margin: 40 }}
-        >
-          {selectedRecipe && (
-            <View>
-              <Text>{selectedRecipe.name}</Text>
-              <Text>{selectedRecipe.description}</Text>
-              <Text>{selectedRecipe.ingredients}</Text>
-              <Text>{selectedRecipe.steps}</Text>
-            </View>
+        {currentMenu &&
+          currentMenu.recipes &&
+          currentMenu.recipes.length > 0 && (
+            <ScrollView>
+              {sortedRecipes.map((recipe, index) => (
+                <Pressable
+                  key={index}
+                  onPress={() =>
+                    editMode ? showSearchModal(recipe) : handleDetails(recipe)
+                  }
+                >
+                  <View style={styles.card}>
+                    <Text style={{ fontWeight: "bold", fontSize: 17 }}>
+                      {recipe.name}
+                    </Text>
+                    <Text>{recipe.label}</Text>
+                    <Text>{recipe.weekDay}</Text>
+                  </View>
+                </Pressable>
+              ))}
+            </ScrollView>
           )}
-        </Modal>
-      </Portal>
+      </View>
 
       {/* Modal to search and select a new recipe */}
       <Portal>
