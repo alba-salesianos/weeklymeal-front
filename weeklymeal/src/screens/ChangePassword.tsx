@@ -14,7 +14,9 @@ const ChangePassword: React.FC<Props> = (props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleChangePassword = async () => {
-    if (newPassword === confirmPassword) {
+    if (newPassword == "" || confirmPassword == "") {
+      Toast.error("Rellena los campos", "top");
+    } else if (newPassword === confirmPassword) {
       try {
         const userUpdate = {
           userName: currentUser.userName,

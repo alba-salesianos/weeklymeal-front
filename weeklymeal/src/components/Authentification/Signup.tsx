@@ -30,17 +30,12 @@ const Signup: React.FC<Props> = (props) => {
       formData.password === "" ||
       formData.email === ""
     ) {
-      Toast.warn("Capón, rellena los 3 campos.", "top");
+      Toast.warn("Rellena los 3 campos.", "top");
     } else {
       try {
-        const registeredUser = await UserService.register(formData);
-        if (registeredUser) {
-          props.navigation.goBack();
-        } else {
-          Toast.error("Alguno de estos datos ya existe.", "top");
-        }
+        await UserService.register(formData);
+        props.navigation.goBack();
       } catch (error) {
-        console.error("Error during registration:", error);
         Toast.error("Error durante el registro.", "top");
       }
     }

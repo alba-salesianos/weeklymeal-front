@@ -4,13 +4,11 @@ import { Modal, PaperProvider, Portal } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
 import TodayRecipe from "../components/Recipes/TodayRecipe";
 import AddRecipe from "../components/Recipes/AddRecipe";
-
 import { RecipeContext } from "../contexts/RecipeContext";
 import RecipeService from "../services/recipes.service";
 import MenuService from "../services/menu.service";
 import { UserInfoContext } from "../contexts/UserInfoContext";
 import { Menu } from "../types/RecipeType";
-import WeeklyMenu from "./WeeklyMenu";
 
 const Homescreen = () => {
   const { recipes, setRecipes, setCurrentMenu, menuCreated, setMenuCreated } =
@@ -37,36 +35,51 @@ const Homescreen = () => {
 
   // useEffect that will retrieve the recipes from the API when the component mounts
   useEffect(() => {
-    async function retrieveRecipes() {
+    async function retrieveData() {
+      if (!currentUser) {
+        return;
+      }
+
       try {
-        if (currentUser) {
-          const data = await RecipeService.getAllRecipes(currentUser.id);
-          setRecipes(data);
+        const recipeData = await RecipeService.getAllRecipes(currentUser.id);
+        setRecipes(recipeData);
 
-          const menuData: Menu = await MenuService.getLastMenu(currentUser.id);
+        const menuData: Menu = await MenuService.getLastMenu(currentUser.id);
+        setCurrentMenu(menuData);
 
-          setCurrentMenu(menuData);
-
-          console.log("recetas obtenidas correctamente");
-        }
+        console.log("Datos obtenidos correctamente");
       } catch (error) {
+        setRecipes([]);
+        setCurrentMenu(undefined);
+
         console.log(error);
+      } finally {
       }
     }
-    retrieveRecipes();
-  }, [setRecipes, setCurrentMenu, currentUser.id]);
 
-  // useEffect para re-renderizar los componentes cuando se crea un nuevo menú
+    retrieveData();
+  }, [currentUser, setRecipes, setCurrentMenu]);
+
   useEffect(() => {
     if (menuCreated) {
-      setMenuCreated(false); // Resetear el estado después de que se ha creado el menú
+      async function retrieveData() {
+        try {
+          const menuData: Menu = await MenuService.getLastMenu(currentUser.id);
+          setCurrentMenu(menuData);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setMenuCreated(false); // Resetear el estado
+        }
+      }
+      retrieveData();
     }
-  }, [menuCreated, setMenuCreated]);
+  }, [menuCreated, setMenuCreated, currentUser.id]);
 
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <TodayRecipe />
+        <TodayRecipe key={currentUser.id} />
 
         <View>
           <Portal>

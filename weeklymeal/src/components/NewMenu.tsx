@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { View, StyleSheet, Pressable, Text } from "react-native";
-import { TextInput, RadioButton } from "react-native-paper";
+import { TextInput, RadioButton, ActivityIndicator } from "react-native-paper";
 import { RecipeContext } from "../contexts/RecipeContext";
 import { Menu, MenuPetition, Preferences, Recipe } from "../types/RecipeType";
 
@@ -23,6 +23,7 @@ interface NewMenuProps {
 const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
   const { recipes, setCurrentMenu, setMenuCreated } = useContext(RecipeContext);
   const { currentUser } = useContext(UserInfoContext);
+  const [loading, setLoading] = useState<boolean>(false); //
 
   const [menuType, setMenuType] = useState<"predefined" | "custom">(
     "predefined"
@@ -39,20 +40,14 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
 
   const updateRecipeDay = async (recipe: Recipe) => {
     try {
-      console.log(
-        `Updating recipe with ID: ${recipe.id} and day: ${recipe.weekDay}`
-      );
-      const response = await RecipeService.updateRecipe(recipe);
-      console.log(
-        `Recipe ${recipe.id} updated successfully with day ${recipe.weekDay}`,
-        response
-      );
+      await RecipeService.updateRecipe(recipe);
     } catch (error) {
       console.error(`Error updating recipe ${recipe.id}:`, error);
     }
   };
 
   const generateMenu = async () => {
+    setLoading(true);
     let selectedRecipes: Recipe[] = [];
     let lastUsedLabels: string[] = [];
     let usedRecipes: Set<number> = new Set();
@@ -131,6 +126,8 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
       onCloseModal();
     } catch (error) {
       console.error("Error creating menu:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -180,7 +177,11 @@ const NewMenu: React.FC<NewMenuProps> = ({ onCloseModal }) => {
       )}
 
       <Pressable style={styles.button} onPress={generateMenu}>
-        <Text style={styles.buttonText}>Generar Menú</Text>
+        {loading ? (
+          <ActivityIndicator animating={true} color="white" />
+        ) : (
+          <Text style={styles.buttonText}>Generar Menú</Text>
+        )}
       </Pressable>
     </View>
   );

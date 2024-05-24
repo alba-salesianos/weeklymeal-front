@@ -87,7 +87,7 @@ const Recipes = () => {
             showAddModal();
           }}
         >
-          <Ionicons name="add-outline" size={20} color="#000" />
+          <Ionicons name="add-outline" size={20} color="white" />
         </Pressable>
 
         {/* Scroll view to display filtered recipes */}
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 8,
     padding: 20,
-    marginBottom: 20,
+    marginTop: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     bottom: 50,
     right: 30,
     padding: 15,
-    backgroundColor: "#fff0e7",
+    backgroundColor: "#f28966",
     borderRadius: 50,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },

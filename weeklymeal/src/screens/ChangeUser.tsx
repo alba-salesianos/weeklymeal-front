@@ -18,7 +18,6 @@ const ChangeUser: React.FC<Props> = (props) => {
       Toast.error("Introduzca nombre de usuario.", "top");
       return;
     }
-
     try {
       const userUpdate = {
         userName: newUsername,
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
   },
   greetingText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 20,
     color: "#333",

@@ -10,8 +10,7 @@ import { LoginPetition } from "../../types/UserInfo";
 type Props = StackScreenProps<RootStackParamList, "Login">;
 
 const Login: React.FC<Props> = (props) => {
-  const { currentUser, setisLogged, setCurrentUser } =
-    React.useContext(UserInfoContext);
+  const { setisLogged, setCurrentUser } = React.useContext(UserInfoContext);
 
   const [formData, setFormData] = React.useState({
     userName: "",
@@ -34,24 +33,15 @@ const Login: React.FC<Props> = (props) => {
   // an error message to the user.
   const handleLogin = async () => {
     if (formData.userName === "" || formData.password === "") {
-      Toast.warn("Capón, rellena los 2 campos.", "top");
+      Toast.error("Rellena los 2 campos.", "top");
     } else {
       try {
         const loggedUser = await UserService.login(formData);
-        console.log(loggedUser);
-
-        if (loggedUser) {
-          setCurrentUser(loggedUser);
-
-          setisLogged(true);
-
-          props.navigation.push("BottomTabNav");
-        } else {
-          Toast.error("Usuario o contraseña incorrecta.", "top");
-        }
+        setCurrentUser(loggedUser);
+        setisLogged(true);
+        props.navigation.push("BottomTabNav");
       } catch (error) {
-        console.error("Error during login:", error);
-        Toast.error("Error during login.", "top");
+        Toast.error("Alguno de los campos es erróneo.", "top");
       }
     }
   };

@@ -1,28 +1,23 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
 import { Recipe, Menu } from "../types/RecipeType";
 import { Modal, Portal, Provider, Searchbar } from "react-native-paper";
 import NewMenu from "../components/NewMenu";
-import RecipeDetailsScreen from "./RecipeDetailsScreen";
 import { navigate } from "../navigation/NavigationContainer";
 
 const WeeklyMenu = () => {
-  const { currentMenu, recipes, setCurrentMenu } = useContext(RecipeContext);
+  const { currentMenu, recipes, setCurrentMenu, menuCreated, setMenuCreated } =
+    useContext(RecipeContext);
+  const [refresh, setRefresh] = useState(false);
 
   // States that manage the visibility for the modals, the edit mode, the selected recipe, and the search text
-  const [visible, setVisible] = useState<boolean>(false);
+
   const [editMode, setEditMode] = useState<boolean>(false);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [searchVisible, setSearchVisible] = useState<boolean>(false);
   const [newMenuVisible, setNewMenuVisible] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
-
-  // Function to show the recipe details modal
-  const showDetailsModal = (recipe: Recipe) => {
-    setSelectedRecipe(recipe);
-    setVisible(true);
-  };
 
   // Function to show the search modal for selecting a new recipe
   const showSearchModal = (recipe: Recipe) => {
@@ -31,7 +26,6 @@ const WeeklyMenu = () => {
   };
 
   // Functions to hide the modals
-  const hideModal = () => setVisible(false);
   const hideSearchModal = () => setSearchVisible(false);
   const hideNewMenuModal = () => setNewMenuVisible(false);
   const showNewMenuModal = () => setNewMenuVisible(true);
@@ -103,15 +97,12 @@ const WeeklyMenu = () => {
   return (
     <Provider>
       <View style={styles.container}>
-        {currentMenu &&
-        currentMenu.recipes &&
-        currentMenu.recipes.length === 0 ? (
+        {recipes.length < 7 ? (
           <>
-            {recipes.length < 7 && (
-              <Text style={styles.infoText}>
-                Añade al menos 7 recetas para crear un menú semanal.
-              </Text>
-            )}
+            <Text style={styles.infoText}>
+              Añade al menos 7 recetas para crear un menú semanal.
+            </Text>
+
             {/* Button to create a new menu, disabled if there are less than 7 recipes */}
             <Pressable
               style={[
